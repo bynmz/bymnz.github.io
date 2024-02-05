@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Twitter cards -->
+  <meta name="twitter:card"  content="summary">
+  <meta name="twitter:title" content="Simple UI with Dear Imgui">
+
+  
+  <meta name="twitter:description" content="I needed a quick and easy solution to implement a UI for The Nile C++ Engine and came across Dear Imgui.
+The following steps outline how I integrated Dear Imgui into The Nile Engine. If you’re not very familiar with Vulkan and graphics APIs and want to follow along with this tutorial, there are several vulkan specification docs and resources online, such as this one that can provide a better understanding of the graphics API that I used. Feel free to clone my vulkan renderer, which I will be using here and in future tutorials. You may also modify the renderer to suit your own personal requirements.
+
+">
+  
+  <meta name="twitter:image" content="https://nileorigin.com/images/avatar.jpg">
+  <!-- end of Twitter cards -->
+
+  <!-- OpenGraph metadata -->
+  <meta property="og:title" content="Simple UI with Dear Imgui">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://nileorigin.com/2024/02/05/simple-ui-with-dear-imgui/">
+
+  
+  <meta property="og:description" content="I needed a quick and easy solution to implement a UI for The Nile C++ Engine and came across Dear Imgui.
+The following steps outline how I integrated Dear Imgui into The Nile Engine. If you’re not very familiar with Vulkan and graphics APIs and want to follow along with this tutorial, there are several vulkan specification docs and resources online, such as this one that can provide a better understanding of the graphics API that I used. Feel free to clone my vulkan renderer, which I will be using here and in future tutorials. You may also modify the renderer to suit your own personal requirements.
+
+">
+  
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    bynmz.io - Simple UI with Dear Imgui
+  </title>
+
+  <!-- Disable favicon -->
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+
+  <!-- CSS -->
+  <style type="text/css">
+  @font-face {
+    font-family: 'PT Sans'; font-style: normal; font-weight: 400;
+    font-display: fallback;
+    src: local('PT Sans'), local('PTSans-Regular'), url(/fonts/pt_sans-web-regular-webfont.woff) format('woff');
+  }
+  @font-face {
+    font-family: 'PT Sans'; font-style: normal; font-weight: 700;
+    font-display: fallback;
+    src: local('PT Sans Bold'), local('PTSans-Bold'), url(/fonts/pt_sans-web-bold-webfont.woff) format('woff');
+  }
+  @font-face {
+    font-family: 'PT Sans'; font-style: italic; font-weight: 400;
+    font-display: fallback;
+    src: local('PT Sans Italic'), local('PTSans-Italic'), url(/fonts/pt_sans-web-italic-webfont.woff) format('woff');
+  }
+
+  /*
+ *                        ___
+ *                       /\_ \
+ *  _____     ___     ___\//\ \      __
+ * /\ '__`\  / __`\  / __`\\ \ \   /'__`\
+ * \ \ \_\ \/\ \_\ \/\ \_\ \\_\ \_/\  __/
+ *  \ \ ,__/\ \____/\ \____//\____\ \____\
+ *   \ \ \/  \/___/  \/___/ \/____/\/____/
+ *    \ \_\
+ *     \/_/
+ *
+ * Designed, built, and released under MIT license by @mdo. Learn more at
+ * https://github.com/poole/poole.
+ */
+
+
+/*
+ * Contents
+ *
+ * Body resets
+ * Custom type
+ * Messages
+ * Container
+ * Masthead
+ * Posts and pages
+ * Pagination
+ * Reverse layout
+ * Themes
+ */
+
+
+/*
+ * Body resets
+ *
+ * Update the foundational and global aspects of the page.
+ */
+
+* {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+@media (min-width: 38em) {
+  html {
+    font-size: 18px;
+  }
+}
+
+body {
+  color: #515151;
+  background-color: #fff;
+  -webkit-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+}
+
+/* No `:visited` state is required by default (browsers will use `a`) */
+a {
+  color: #268bd2;
+  text-decoration: none;
+}
+a strong {
+  color: inherit;
+}
+/* `:focus` is linked to `:hover` for basic accessibility */
+a:hover,
+a:focus {
+  text-decoration: underline;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: .5rem;
+  font-weight: bold;
+  line-height: 1.25;
+  color: #313131;
+  text-rendering: optimizeLegibility;
+  clear: left;
+}
+h1 {
+  font-size: 2rem;
+}
+h2 {
+  margin-top: 1rem;
+  font-size: 1.5rem;
+}
+h3 {
+  margin-top: 1.5rem;
+  font-size: 1.25rem;
+}
+h4, h5, h6 {
+  margin-top: 1rem;
+  font-size: 1rem;
+}
+
+/* Body text */
+p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+strong {
+  color: #303030;
+}
+
+
+/* Lists */
+ul, ol, dl {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+dt {
+  font-weight: bold;
+}
+dd {
+  margin-bottom: .5rem;
+}
+
+/* Misc */
+hr {
+  position: relative;
+  margin: 1.5rem 0;
+  border: 0;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #fff;
+}
+
+abbr {
+  font-size: 85%;
+  font-weight: bold;
+  color: #555;
+  text-transform: uppercase;
+}
+abbr[title] {
+  cursor: help;
+  border-bottom: 1px dotted #e5e5e5;
+}
+
+/* Code */
+code,
+pre {
+  font-family: Menlo, Monaco, "Courier New", monospace;
+}
+code {
+  padding: .25em .5em;
+  font-size: 85%;
+  color: #bf616a;
+  background-color: #f9f9f9;
+  border-radius: 3px;
+}
+pre {
+  display: block;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  font-size: .8rem;
+  line-height: 1.4;
+  white-space: pre;
+  white-space: pre-wrap;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f9f9f9;
+}
+pre code {
+  padding: 0;
+  font-size: 100%;
+  color: inherit;
+  background-color: transparent;
+}
+
+/* Pygments via Jekyll */
+.highlight {
+  margin-bottom: 1rem;
+  border-radius: 4px;
+}
+.highlight pre {
+  margin-bottom: 0;
+}
+
+/* Gist via GitHub Pages */
+.gist .gist-file {
+  font-family: Menlo, Monaco, "Courier New", monospace !important;
+}
+.gist .markdown-body {
+  padding: 15px;
+}
+.gist pre {
+  padding: 0;
+  background-color: transparent;
+}
+.gist .gist-file .gist-data {
+  font-size: .8rem !important;
+  line-height: 1.4;
+}
+.gist code {
+  padding: 0;
+  color: inherit;
+  background-color: transparent;
+  border-radius: 0;
+}
+
+/* Quotes */
+blockquote {
+  padding: .5rem 1rem;
+  margin: .8rem 0;
+  color: #7a7a7a;
+  border-left: .25rem solid #e5e5e5;
+}
+blockquote p:last-child {
+  margin-bottom: 0;
+}
+@media (min-width: 30em) {
+  blockquote {
+    padding-right: 5rem;
+    padding-left: 1.25rem;
+  }
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  margin: 0 0 1rem;
+  border-radius: 5px;
+}
+
+/* Tables */
+table {
+  margin-bottom: 1rem;
+  width: 100%;
+  border: 1px solid #e5e5e5;
+  border-collapse: collapse;
+}
+td,
+th {
+  padding: .25rem .5rem;
+  border: 1px solid #e5e5e5;
+}
+tbody tr:nth-child(odd) td,
+tbody tr:nth-child(odd) th {
+  background-color: #f9f9f9;
+}
+
+
+/*
+ * Custom type
+ *
+ * Extend paragraphs with `.lead` for larger introductory text.
+ */
+
+.lead {
+  font-size: 1.25rem;
+  font-weight: 300;
+}
+
+
+/*
+ * Messages
+ *
+ * Show alert messages to users. You may add it to single elements like a `<p>`,
+ * or to a parent if there are multiple elements to show.
+ */
+
+.message {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  color: #717171;
+  background-color: #f9f9f9;
+}
+
+
+/*
+ * Container
+ *
+ * Center the page content.
+ */
+
+.container {
+  max-width: 38rem;
+  padding-left:  1rem;
+  padding-right: 1rem;
+  margin-left:  auto;
+  margin-right: auto;
+}
+
+
+/*
+ * Masthead
+ *
+ * Super small header above the content for site name and short description.
+ */
+
+.masthead {
+  padding-top:    1rem;
+  padding-bottom: 1rem;
+  margin-bottom: 3rem;
+}
+.masthead-title {
+  margin-top: 0;
+  margin-bottom: 0;
+  color: #505050;
+}
+.masthead-title a {
+  color: #505050;
+}
+.masthead-title small {
+  font-size: 75%;
+  font-weight: 400;
+  color: #c0c0c0;
+  letter-spacing: 0;
+}
+
+
+/*
+ * Posts and pages
+ *
+ * Each post is wrapped in `.post` and is used on default and post layouts. Each
+ * page is wrapped in `.page` and is only used on the page layout.
+ */
+
+.page,
+.post {
+  margin-bottom: 4em;
+}
+
+/* Blog post or page title */
+.page-title,
+.post-title,
+.post-title a {
+  color: #303030;
+}
+.page-title,
+.post-title {
+  margin-top: 0;
+}
+
+/* Meta data line below post title */
+.post-date {
+  display: block;
+  margin-top: -.5rem;
+  margin-bottom: 1rem;
+  color: #9a9a9a;
+}
+
+/* Related posts */
+.related {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  border-top: 1px solid #eee;
+}
+.related-posts {
+  padding-left: 0;
+  list-style: none;
+}
+.related-posts h3 {
+  margin-top: 0;
+}
+.related-posts li small {
+  font-size: 75%;
+  color: #999;
+}
+.related-posts li a:hover {
+  color: #268bd2;
+  text-decoration: none;
+}
+.related-posts li a:hover small {
+  color: inherit;
+}
+
+
+/*
+ * Pagination
+ *
+ * Super lightweight (HTML-wise) blog pagination. `span`s are provide for when
+ * there are no more previous or next posts to show.
+ */
+
+.pagination {
+  overflow: hidden; /* clearfix */
+  margin-left: -1rem;
+  margin-right: -1rem;
+  font-family: "PT Sans", Helvetica, Arial, sans-serif;
+  color: #ccc;
+  text-align: center;
+}
+
+/* Pagination items can be `span`s or `a`s */
+.pagination-item {
+  display: block;
+  padding: 1rem;
+  border: 1px solid #eee;
+}
+.pagination-item:first-child {
+  margin-bottom: -1px;
+}
+
+/* Only provide a hover state for linked pagination items */
+a.pagination-item:hover {
+  background-color: #f5f5f5;
+}
+
+@media (min-width: 30em) {
+  .pagination {
+    margin: 3rem 0;
+  }
+  .pagination-item {
+    float: left;
+    width: 50%;
+  }
+  .pagination-item:first-child {
+    margin-bottom: 0;
+    border-top-left-radius:    4px;
+    border-bottom-left-radius: 4px;
+  }
+  .pagination-item:last-child {
+    margin-left: -1px;
+    border-top-right-radius:    4px;
+    border-bottom-right-radius: 4px;
+  }
+}
+
+  .highlight .hll { background-color: #ffc; }
+.highlight .c { color: #999; } /* Comment */
+.highlight .err { color: #a00; background-color: #faa } /* Error */
+.highlight .k { color: #069; } /* Keyword */
+.highlight .o { color: #555 } /* Operator */
+.highlight .cm { color: #09f; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #099 } /* Comment.Preproc */
+.highlight .c1 { color: #999; } /* Comment.Single */
+.highlight .cs { color: #999; } /* Comment.Special */
+.highlight .gd { background-color: #fcc; border: 1px solid #c00 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #f00 } /* Generic.Error */
+.highlight .gh { color: #030; } /* Generic.Heading */
+.highlight .gi { background-color: #cfc; border: 1px solid #0c0 } /* Generic.Inserted */
+.highlight .go { color: #aaa } /* Generic.Output */
+.highlight .gp { color: #009; } /* Generic.Prompt */
+.highlight .gs { } /* Generic.Strong */
+.highlight .gu { color: #030; } /* Generic.Subheading */
+.highlight .gt { color: #9c6 } /* Generic.Traceback */
+.highlight .kc { color: #069; } /* Keyword.Constant */
+.highlight .kd { color: #069; } /* Keyword.Declaration */
+.highlight .kn { color: #069; } /* Keyword.Namespace */
+.highlight .kp { color: #069 } /* Keyword.Pseudo */
+.highlight .kr { color: #069; } /* Keyword.Reserved */
+.highlight .kt { color: #078; } /* Keyword.Type */
+.highlight .m { color: #f60 } /* Literal.Number */
+.highlight .s { color: #d44950 } /* Literal.String */
+.highlight .na { color: #4f9fcf } /* Name.Attribute */
+.highlight .nb { color: #366 } /* Name.Builtin */
+.highlight .nc { color: #0a8; } /* Name.Class */
+.highlight .no { color: #360 } /* Name.Constant */
+.highlight .nd { color: #99f } /* Name.Decorator */
+.highlight .ni { color: #999; } /* Name.Entity */
+.highlight .ne { color: #c00; } /* Name.Exception */
+.highlight .nf { color: #c0f } /* Name.Function */
+.highlight .nl { color: #99f } /* Name.Label */
+.highlight .nn { color: #0cf; } /* Name.Namespace */
+.highlight .nt { color: #2f6f9f; } /* Name.Tag */
+.highlight .nv { color: #033 } /* Name.Variable */
+.highlight .ow { color: #000; } /* Operator.Word */
+.highlight .w { color: #bbb } /* Text.Whitespace */
+.highlight .mf { color: #f60 } /* Literal.Number.Float */
+.highlight .mh { color: #f60 } /* Literal.Number.Hex */
+.highlight .mi { color: #f60 } /* Literal.Number.Integer */
+.highlight .mo { color: #f60 } /* Literal.Number.Oct */
+.highlight .sb { color: #c30 } /* Literal.String.Backtick */
+.highlight .sc { color: #c30 } /* Literal.String.Char */
+.highlight .sd { color: #c30; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #c30 } /* Literal.String.Double */
+.highlight .se { color: #c30; } /* Literal.String.Escape */
+.highlight .sh { color: #c30 } /* Literal.String.Heredoc */
+.highlight .si { color: #a00 } /* Literal.String.Interpol */
+.highlight .sx { color: #c30 } /* Literal.String.Other */
+.highlight .sr { color: #3aa } /* Literal.String.Regex */
+.highlight .s1 { color: #c30 } /* Literal.String.Single */
+.highlight .ss { color: #fc3 } /* Literal.String.Symbol */
+.highlight .bp { color: #366 } /* Name.Builtin.Pseudo */
+.highlight .vc { color: #033 } /* Name.Variable.Class */
+.highlight .vg { color: #033 } /* Name.Variable.Global */
+.highlight .vi { color: #033 } /* Name.Variable.Instance */
+.highlight .il { color: #f60 } /* Literal.Number.Integer.Long */
+
+.css .o,
+.css .o + .nt,
+.css .nt + .nt { color: #999; }
+  /*
+ *  __                  __
+ * /\ \                /\ \
+ * \ \ \___   __  __   \_\ \     __
+ *  \ \  _ `\/\ \/\ \  /'_` \  /'__`\
+ *   \ \ \ \ \ \ \_\ \/\ \_\ \/\  __/
+ *    \ \_\ \_\/`____ \ \___,_\ \____\
+ *     \/_/\/_/`/___/> \/__,_ /\/____/
+ *                /\___/
+ *                \/__/
+ *
+ * Designed, built, and released under MIT license by @mdo. Learn more at
+ * https://github.com/poole/hyde.
+ */
+
+
+/*
+ * Contents
+ *
+ * Global resets
+ * Sidebar
+ * Container
+ * Reverse layout
+ * Themes
+ */
+
+
+/*
+ * Global resets
+ *
+ * Update the foundational and global aspects of the page.
+ */
+
+html {
+  font-family: "PT Sans", Helvetica, Arial, sans-serif;
+}
+@media (min-width: 48em) {
+  html {
+    font-size: 16px;
+  }
+}
+@media (min-width: 58em) {
+  html {
+    font-size: 18px;
+  }
+}
+
+
+/*
+ * Sidebar
+ *
+ * Flexible banner for housing site name, intro, and "footer" content. Starts
+ * out above content in mobile and later moves to the side with wider viewports.
+ */
+
+.sidebar {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: rgba(255,255,255,.5);
+  background-color: #202020;
+}
+.sidebar-mini {
+  display: inline;
+}
+.sidebar-content {
+  display: none;
+}
+@media (min-width: 48em) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 18rem;
+    text-align: left;
+  }
+  .sidebar-mini {
+	display: none;
+  }
+  .sidebar-content {
+	display: inline;
+  }
+}
+
+/* Sidebar links */
+.sidebar a {
+  color: #fff;
+}
+
+/* Sidebar nav */
+.sidebar-nav {
+  margin-bottom: 1rem;
+}
+.sidebar-nav-item {
+  display: block;
+  line-height: 1.75;
+}
+a.sidebar-nav-item:hover,
+a.sidebar-nav-item:focus {
+  text-decoration: underline;
+}
+.sidebar-nav-item.active {
+  font-weight: bold;
+}
+
+/* Sticky sidebar
+ *
+ * Add the `sidebar-sticky` class to the sidebar's container to affix it the
+ * contents to the bottom of the sidebar in tablets and up.
+ */
+
+@media (min-width: 48em) {
+  .sidebar-sticky {
+    position: absolute;
+    right:  1rem;
+    bottom: 1rem;
+    left:   1rem;
+  }
+}
+
+
+/* Container
+ *
+ * Align the contents of the site above the proper threshold with some margin-fu
+ * with a 25%-wide `.sidebar`.
+ */
+
+.content {
+  padding-top:    4rem;
+  padding-bottom: 4rem;
+}
+
+@media (min-width: 48em) {
+  .content {
+    max-width: 38rem;
+    margin-left: 20rem;
+    margin-right: 2rem;
+  }
+}
+
+@media (min-width: 64em) {
+  .content {
+    max-width: 48rem;
+    margin-left: 22rem;
+    margin-right: 4rem;
+  }
+}
+
+
+/*
+ * Reverse layout
+ *
+ * Flip the orientation of the page by placing the `.sidebar` on the right.
+ */
+
+@media (min-width: 48em) {
+  .layout-reverse .sidebar {
+    left: auto;
+    right: 0;
+  }
+  .layout-reverse .content {
+    margin-left: 2rem;
+    margin-right: 20rem;
+  }
+}
+
+@media (min-width: 64em) {
+  .layout-reverse .content {
+    margin-left: 4rem;
+    margin-right: 22rem;
+  }
+}
+
+
+
+/*
+ * Themes
+ *
+ * As of v1.1, Hyde includes optional themes to color the sidebar and links
+ * within blog posts. To use, add the class of your choosing to the `body`.
+ */
+
+/* Base16 (http://chriskempson.github.io/base16/#default) */
+
+/* Red */
+.theme-base-08 .sidebar {
+  background-color: #ac4142;
+}
+.theme-base-08 .content a,
+.theme-base-08 .related-posts li a:hover {
+  color: #ac4142;
+}
+
+/* Orange */
+.theme-base-09 .sidebar {
+  background-color: #d28445;
+}
+.theme-base-09 .content a,
+.theme-base-09 .related-posts li a:hover {
+  color: #d28445;
+}
+
+/* Yellow */
+.theme-base-0a .sidebar {
+  background-color: #f4bf75;
+}
+.theme-base-0a .content a,
+.theme-base-0a .related-posts li a:hover {
+  color: #f4bf75;
+}
+
+/* Green */
+.theme-base-0b .sidebar {
+  background-color: #90a959;
+}
+.theme-base-0b .content a,
+.theme-base-0b .related-posts li a:hover {
+  color: #90a959;
+}
+
+/* Cyan */
+.theme-base-0c .sidebar {
+  background-color: #75b5aa;
+}
+.theme-base-0c .content a,
+.theme-base-0c .related-posts li a:hover {
+  color: #75b5aa;
+}
+
+/* Blue */
+.theme-base-0d .sidebar {
+  background-color: #6a9fb5;
+}
+.theme-base-0d .content a,
+.theme-base-0d .related-posts li a:hover {
+  color: #6a9fb5;
+}
+
+/* Magenta */
+.theme-base-0e .sidebar {
+  background-color: #aa759f;
+}
+.theme-base-0e .content a,
+.theme-base-0e .related-posts li a:hover {
+  color: #aa759f;
+}
+
+/* Brown */
+.theme-base-0f .sidebar {
+  background-color: #8f5536;
+}
+.theme-base-0f .content a,
+.theme-base-0f .related-posts li a:hover {
+  color: #8f5536;
+}
+
+  </style>
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed/">
+
+  
+</head>
+<body>
+<div class="sidebar">
+  <div class="container">
+    <div class="sidebar-about">
+      <p class="lead"><a href="/"><nobr>Having some fun <br/> with pixels :)</nobr></a></p>
+    </div>
+
+    
+    <div class="sidebar-mini">
+	    Ben&nbsp;Young&nbsp;Mwanzia&nbsp;<br/>
+        <small><a href="https://twitter.com/_benng__"><img src="/images/twitter.svg" width="20" height="20" style="display: inline; vertical-align: -22px;" /></a>,&nbsp;<a href="https://mastodon.gamedev.place/@bynmz"><img src="/images/mastodon.svg" width="16" height="16" style="display: inline; vertical-align: -21px;" /></a>,&nbsp;<a href="https://youtube.com/@benng5517"><img src="/images/youtube.svg" width="16" height="16" style="display: inline; vertical-align: -21px;" /></a>,&nbsp;<a href="mailto:youngmwanzia@gmail.com">email</a></small>
+    </div>
+
+    <div class="sidebar-content">
+    
+      <h4>Posts Author</h4>
+      <p>
+        Ben&nbsp;Young&nbsp;Mwanzia&nbsp;<br/>
+        <small><a href="https://twitter.com/_benng__"><img src="/images/twitter.svg" width="20" height="20" style="display: inline; vertical-align: -22px;" /></a>,&nbsp;<a href="https://mastodon.gamedev.place/@bynmz"><img src="/images/mastodon.svg" width="16" height="16" style="display: inline; vertical-align: -21px;" /></a>,&nbsp;<a href="https://youtube.com/@benng5517"><img src="/images/youtube.svg" width="16" height="16" style="display: inline; vertical-align: -21px;" /></a>,&nbsp;<a href="mailto:youngmwanzia@gmail.com">email</a></small>
+      </p>
+      <p>
+      <a href="/about/">Work and about</a>
+      </p>
+
+      <h4>Posts</h4>
+      <p>
+      If you like this blog, you should follow it <a href="/feed/">via RSS</a> and read <a href="/archives/">older posts</a>. Here are the recent posts:
+      </p>
+      <ul style="padding-left: 20px;">
+      
+        <li>
+          <small><a href="/2024/02/05/simple-ui-with-dear-imgui/">Simple UI with Dear Imgui</a></small>
+        </li>
+      
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="content container">
+
+<table>
+<tr>
+ 
+ 
+</tr>
+</table>
+<div class="post">
+<h1 class="post-title">Simple UI with Dear Imgui</h1>
+<span class="post-date">
+
+05 Feb 2024
+
+</span>
+<p>I needed a quick and easy solution to implement a UI for The Nile C++ Engine and came across <a href="https://github.com/ocornut/imgui">Dear Imgui</a>.
+The following steps outline how I integrated Dear Imgui into The Nile Engine. If you’re not very familiar with Vulkan and graphics APIs and want to follow along with this tutorial, there are several vulkan specification docs and resources online, such as <a href="https://vulkan-tutorial.com/">this one</a> that can provide a better understanding of the graphics API that I used. Feel free to clone my <a href="https://github.com/bynmz/mygraphicsengine">vulkan renderer</a>, which I will be using here and in future tutorials. You may also modify the renderer to suit your own personal requirements.</p>
+
+<p><img src="/images/simple_dear_imgui_ui.png" alt="" /></p>
+
+<p>First, I copied the Dear imgui library into the <code class="language-plaintext highlighter-rouge">external/imgui</code> directory and added it’s path to cmake.</p>
+
+<p>CMakeLists.txt:</p>
+
+<div class="language-cmake highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">include_directories</span><span class="p">(</span>external<span class="p">)</span>
+
+<span class="c1"># If IMGUI_PATH not specified in .env.cmake, try fetching from git repo</span>
+<span class="nb">if</span> <span class="p">(</span>NOT IMGUI_PATH<span class="p">)</span>
+  <span class="nb">message</span><span class="p">(</span>STATUS <span class="s2">"IMGUI_PATH not specified in .env.cmake, using external/imgui"</span><span class="p">)</span>
+  <span class="nb">set</span><span class="p">(</span>IMGUI_PATH external/imgui<span class="p">)</span>
+<span class="nb">endif</span><span class="p">()</span>
+
+<span class="nb">file</span><span class="p">(</span>GLOB_RECURSE SOURCES <span class="si">${</span><span class="nv">PROJECT_SOURCE_DIR</span><span class="si">}</span>/src/*.cpp<span class="p">)</span>
+
+<span class="nb">add_executable</span><span class="p">(</span><span class="si">${</span><span class="nv">PROJECT_NAME</span><span class="si">}</span> <span class="si">${</span><span class="nv">SOURCES</span><span class="si">}</span> <span class="si">${</span><span class="nv">IMGUI_PATH</span><span class="si">}</span>/backends/imgui_impl_glfw.cpp <span class="si">${</span><span class="nv">IMGUI_PATH</span><span class="si">}</span>/backends/imgui_impl_vulkan.cpp <span class="si">${</span><span class="nv">IMGUI_PATH</span><span class="si">}</span>/imgui.cpp <span class="si">${</span><span class="nv">IMGUI_PATH</span><span class="si">}</span>/imgui_draw.cpp <span class="si">${</span><span class="nv">IMGUI_PATH</span><span class="si">}</span>/imgui_demo.cpp <span class="si">${</span><span class="nv">IMGUI_PATH</span><span class="si">}</span>/imgui_tables.cpp <span class="si">${</span><span class="nv">IMGUI_PATH</span><span class="si">}</span>/imgui_widgets.cpp<span class="p">)</span>
+</code></pre></div></div>
+<p>Next, I created a new directory <code class="language-plaintext highlighter-rouge">framework/ui</code> for my SimpleUI class header and implementation files.</p>
+
+<p>simple_ui.hpp:</p>
+
+<p>This is a standard C++ header file where I initialize the member variables, constructor, destructor (for clean programming :)), and a few private/ public methods.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">SimpleUI</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+<span class="kt">void</span> <span class="n">loadFonts</span><span class="p">();</span>
+
+<span class="n">NileDevice</span><span class="o">&amp;</span> <span class="n">mDevice</span><span class="p">;</span> 
+<span class="n">VkRenderPass</span> <span class="n">mRenderPass</span><span class="p">;</span>
+<span class="kt">size_t</span> <span class="n">mImageCount</span><span class="p">;</span> 
+<span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">mWindow</span><span class="p">;</span>
+
+<span class="c1">// Data</span>
+<span class="n">VkPipelineCache</span> <span class="n">mPipelineCache</span> <span class="o">=</span> <span class="n">VK_NULL_HANDLE</span><span class="p">;</span>
+<span class="n">QueueFamilyIndices</span> <span class="n">indices</span> <span class="o">=</span> <span class="n">mDevice</span><span class="p">.</span><span class="n">findPhysicalQueueFamilies</span><span class="p">();</span>
+<span class="n">VkQueue</span> <span class="n">mQueue</span> <span class="o">=</span> <span class="n">mDevice</span><span class="p">.</span><span class="n">graphicsQueue</span><span class="p">();</span>
+<span class="n">VkResult</span> <span class="n">err</span><span class="p">;</span>
+<span class="n">VkDescriptorPool</span> <span class="n">imguiPool</span><span class="p">;</span>
+<span class="n">ImGuiIO</span><span class="o">&amp;</span> <span class="n">io</span><span class="p">;</span>
+
+<span class="c1">// UI State</span>
+<span class="kt">bool</span> <span class="n">show_demo_window</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+<span class="kt">bool</span> <span class="n">show_another_window</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+<span class="n">ImVec4</span> <span class="n">clear_color</span> <span class="o">=</span> <span class="n">ImVec4</span><span class="p">(</span><span class="mf">0.45</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.55</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.60</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.00</span><span class="n">f</span><span class="p">);</span>
+
+
+<span class="nl">public:</span>
+<span class="n">SimpleUI</span><span class="p">(</span><span class="n">NileDevice</span><span class="o">&amp;</span> <span class="n">device</span><span class="p">,</span>
+        <span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span>
+        <span class="n">VkRenderPass</span> <span class="n">renderPass</span><span class="p">,</span> 
+        <span class="kt">size_t</span> <span class="n">imageCount</span><span class="p">);</span>
+<span class="o">~</span><span class="n">SimpleUI</span><span class="p">();</span>
+
+<span class="kt">float</span> <span class="n">getFrameRate</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">io</span><span class="p">.</span><span class="n">Framerate</span><span class="p">;</span> <span class="p">}</span>
+<span class="kt">float</span> <span class="n">getDeltaTime</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">io</span><span class="p">.</span><span class="n">DeltaTime</span><span class="p">;</span> <span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">init</span><span class="p">();</span>
+<span class="c1">// delete copy constructors</span>
+<span class="n">SimpleUI</span><span class="p">(</span><span class="k">const</span> <span class="n">SimpleUI</span> <span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+<span class="n">SimpleUI</span> <span class="o">&amp;</span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">SimpleUI</span> <span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="n">startUI</span><span class="p">();</span>
+<span class="kt">void</span> <span class="n">renderUI</span><span class="p">(</span><span class="n">VkCommandBuffer</span> <span class="n">commandBuffer</span><span class="p">,</span> <span class="n">NileRenderer</span> <span class="o">&amp;</span><span class="n">renderer</span><span class="p">);</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="n">check_vk_result</span><span class="p">(</span><span class="n">VkResult</span> <span class="n">err</span><span class="p">);</span>
+<span class="p">};</span>
+</code></pre></div></div>
+<p>simple_ui.cpp:</p>
+
+<p>In the implementation we are setting up a Dear Imgui context when the class constructor is called. We are also making sure to cleanup the context and descriptor pool in the destructor.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include "simple_ui.hpp"
+</span>
+    <span class="n">SimpleUI</span><span class="o">::</span><span class="n">SimpleUI</span><span class="p">(</span>
+      <span class="p">...</span>
+        <span class="p">)</span>
+        <span class="o">:</span> 
+      <span class="p">...</span>
+    <span class="n">io</span><span class="p">(</span> <span class="p">[]</span> <span class="o">-&gt;</span> <span class="n">ImGuiIO</span><span class="o">&amp;</span> <span class="p">{</span>
+        <span class="c1">// Setup Dear ImGui context</span>
+        <span class="n">IMGUI_CHECKVERSION</span><span class="p">();</span>
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">CreateContext</span><span class="p">();</span>
+        <span class="k">return</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetIO</span><span class="p">();</span>
+        <span class="p">}())</span>
+    <span class="p">{</span>
+        <span class="n">init</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="n">SimpleUI</span><span class="o">::~</span><span class="n">SimpleUI</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// Cleanup</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="n">vkDeviceWaitIdle</span><span class="p">(</span><span class="n">mDevice</span><span class="p">.</span><span class="n">device</span><span class="p">());</span>
+        <span class="n">check_vk_result</span><span class="p">(</span><span class="n">err</span><span class="p">);</span>
+        <span class="n">ImGui_ImplVulkan_Shutdown</span><span class="p">();</span>
+        <span class="n">ImGui_ImplGlfw_Shutdown</span><span class="p">();</span>
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">DestroyContext</span><span class="p">();</span>
+        <span class="n">vkDestroyDescriptorPool</span><span class="p">(</span><span class="n">mDevice</span><span class="p">.</span><span class="n">device</span><span class="p">(),</span> <span class="n">imguiPool</span><span class="p">,</span> <span class="nb">nullptr</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">SimpleUI</span><span class="o">::</span><span class="n">init</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">//1: Create descriptor pool for IMGUI</span>
+        <span class="n">VkDescriptorPoolSize</span> <span class="n">pool_sizes</span><span class="p">[]</span> <span class="o">=</span>
+        <span class="p">{</span>
+            <span class="p">{</span><span class="n">VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER</span><span class="p">,</span> <span class="mi">1</span><span class="p">},</span>
+        <span class="p">};</span>
+
+        <span class="n">VkDescriptorPoolCreateInfo</span> <span class="n">pool_info</span> <span class="o">=</span> <span class="p">{};</span>
+        <span class="n">pool_info</span><span class="p">.</span><span class="n">sType</span> <span class="o">=</span> <span class="n">VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO</span><span class="p">;</span>
+        <span class="n">pool_info</span><span class="p">.</span><span class="n">flags</span> <span class="o">=</span> <span class="n">VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT</span><span class="p">;</span> 
+        <span class="n">pool_info</span><span class="p">.</span><span class="n">maxSets</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">pool_info</span><span class="p">.</span><span class="n">poolSizeCount</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint32_t</span><span class="p">)</span><span class="n">IM_ARRAYSIZE</span><span class="p">(</span><span class="n">pool_sizes</span><span class="p">);</span>
+        <span class="n">pool_info</span><span class="p">.</span><span class="n">pPoolSizes</span> <span class="o">=</span> <span class="n">pool_sizes</span><span class="p">;</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="n">vkCreateDescriptorPool</span><span class="p">(</span><span class="n">mDevice</span><span class="p">.</span><span class="n">device</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">pool_info</span><span class="p">,</span> <span class="nb">nullptr</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">imguiPool</span><span class="p">);</span>
+        <span class="n">check_vk_result</span><span class="p">(</span><span class="n">err</span><span class="p">);</span>
+
+        <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">io</span><span class="p">;</span>
+        <span class="c1">// Enable Keyboard Controls</span>
+        <span class="n">io</span><span class="p">.</span><span class="n">ConfigFlags</span> <span class="o">|=</span> <span class="n">ImGuiConfigFlags_NavEnableKeyboard</span><span class="p">;</span>    
+        <span class="c1">// Enable Gamepad Controls </span>
+        <span class="n">io</span><span class="p">.</span><span class="n">ConfigFlags</span> <span class="o">|=</span> <span class="n">ImGuiConfigFlags_NavEnableGamepad</span><span class="p">;</span>       
+
+        <span class="c1">// Setup Dear ImGui style</span>
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">StyleColorsDark</span><span class="p">();</span>
+
+        <span class="c1">// Setup Platform/Renderer backends</span>
+        <span class="n">ImGui_ImplGlfw_InitForVulkan</span><span class="p">(</span><span class="n">mWindow</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+        <span class="n">ImGui_ImplVulkan_InitInfo</span> <span class="n">init_info</span> <span class="o">=</span> <span class="p">{};</span>
+        <span class="n">init_info</span><span class="p">.</span><span class="n">Instance</span> <span class="o">=</span> <span class="n">mDevice</span><span class="p">.</span><span class="n">getInstance</span><span class="p">();</span>
+        <span class="n">init_info</span><span class="p">.</span><span class="n">PhysicalDevice</span> <span class="o">=</span> <span class="n">mDevice</span><span class="p">.</span><span class="n">getPhysicalDevice</span><span class="p">();</span>
+        <span class="n">init_info</span><span class="p">.</span><span class="n">Device</span> <span class="o">=</span> <span class="n">mDevice</span><span class="p">.</span><span class="n">device</span><span class="p">();</span>
+        <span class="n">init_info</span><span class="p">.</span><span class="n">QueueFamily</span> <span class="o">=</span> <span class="n">indices</span><span class="p">.</span><span class="n">graphicsFamily</span><span class="p">;</span>
+        <span class="n">init_info</span><span class="p">.</span><span class="n">Queue</span> <span class="o">=</span> <span class="n">mQueue</span><span class="p">;</span>
+        <span class="n">init_info</span><span class="p">.</span><span class="n">PipelineCache</span> <span class="o">=</span> <span class="n">mPipelineCache</span><span class="p">;</span>
+        <span class="n">init_info</span><span class="p">.</span><span class="n">DescriptorPool</span> <span class="o">=</span> <span class="n">imguiPool</span><span class="p">;</span>
+        <span class="n">init_info</span><span class="p">.</span><span class="n">Subpass</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">init_info</span><span class="p">.</span><span class="n">MinImageCount</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="n">init_info</span><span class="p">.</span><span class="n">ImageCount</span> <span class="o">=</span> <span class="n">mImageCount</span><span class="p">;</span>
+        <span class="n">init_info</span><span class="p">.</span><span class="n">MSAASamples</span> <span class="o">=</span> <span class="n">VK_SAMPLE_COUNT_1_BIT</span><span class="p">;</span>
+        <span class="n">init_info</span><span class="p">.</span><span class="n">Allocator</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>
+        <span class="n">init_info</span><span class="p">.</span><span class="n">CheckVkResultFn</span> <span class="o">=</span> <span class="n">check_vk_result</span><span class="p">;</span>
+        <span class="n">ImGui_ImplVulkan_Init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">init_info</span><span class="p">,</span> <span class="n">mRenderPass</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">SimpleUI</span><span class="o">::</span><span class="n">check_vk_result</span><span class="p">(</span><span class="n">VkResult</span> <span class="n">err</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">err</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">"[vulkan] Error: VkResult = %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">err</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">err</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">abort</span><span class="p">();</span>
+    <span class="p">}</span>
+
+<span class="c1">// Initializes ImGui for a new frame.</span>
+<span class="kt">void</span> <span class="n">SimpleUI</span><span class="o">::</span><span class="n">startUI</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ImGui_ImplVulkan_NewFrame</span><span class="p">();</span>
+    <span class="n">ImGui_ImplGlfw_NewFrame</span><span class="p">();</span>
+    <span class="n">ImGui</span><span class="o">::</span><span class="n">NewFrame</span><span class="p">();</span>
+
+    <span class="c1">// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">show_demo_window</span><span class="p">)</span>
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">ShowDemoWindow</span><span class="p">(</span><span class="o">&amp;</span><span class="n">show_demo_window</span><span class="p">);</span>
+
+    <span class="c1">// 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.</span>
+    <span class="p">{</span>
+        <span class="k">static</span> <span class="kt">float</span> <span class="n">f</span> <span class="o">=</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">;</span>
+        <span class="k">static</span> <span class="kt">int</span> <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="c1">// Create a window called "Hello, world!" and append into it.</span>
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">Begin</span><span class="p">(</span><span class="s">"Hello, world!"</span><span class="p">);</span>                          
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">Text</span><span class="p">(</span><span class="s">"Application average %.3f ms/frame (%.1f FPS)"</span><span class="p">,</span> <span class="mf">1000.0</span><span class="n">f</span> <span class="o">/</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">getFrameRate</span><span class="p">(),</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">getFrameRate</span><span class="p">());</span>
+        <span class="c1">// Edit bools storing our window open/close state</span>
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">Checkbox</span><span class="p">(</span><span class="s">"Settings"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">show_demo_window</span><span class="p">);</span>     
+        <span class="c1">// Edit 3 floats representing a color </span>
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">ColorEdit3</span><span class="p">(</span><span class="s">"clear color"</span><span class="p">,</span> <span class="p">(</span><span class="kt">float</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">clear_color</span><span class="p">);</span> 
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">End</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 3. Show another simple window.</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">show_another_window</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)</span>
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">Begin</span><span class="p">(</span><span class="s">"Another Window"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">show_another_window</span><span class="p">);</span>   
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">Text</span><span class="p">(</span><span class="s">"Hello from another window!"</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">Button</span><span class="p">(</span><span class="s">"Close Me"</span><span class="p">))</span>
+            <span class="n">show_another_window</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">End</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">//Render ImGui and record ImGui primitives into the Vulkan command buffer. The method also updates the clear values in the renderer with the values obtained from ImGui.</span>
+<span class="kt">void</span> <span class="n">SimpleUI</span><span class="o">::</span><span class="n">renderUI</span><span class="p">(</span><span class="n">VkCommandBuffer</span> <span class="n">commandBuffer</span><span class="p">,</span> <span class="n">NileRenderer</span><span class="o">&amp;</span> <span class="n">renderer</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">ImGui</span><span class="o">::</span><span class="n">Render</span><span class="p">();</span>
+    <span class="n">ImDrawData</span><span class="o">*</span> <span class="n">draw_data</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetDrawData</span><span class="p">();</span>
+    <span class="k">const</span> <span class="kt">bool</span> <span class="n">is_minimized</span> <span class="o">=</span> <span class="p">(</span><span class="n">draw_data</span><span class="o">-&gt;</span><span class="n">DisplaySize</span><span class="p">.</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="n">f</span> <span class="o">||</span> <span class="n">draw_data</span><span class="o">-&gt;</span><span class="n">DisplaySize</span><span class="p">.</span><span class="n">y</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">is_minimized</span><span class="p">)</span>
+    <span class="p">{</span>   
+      <span class="n">renderer</span><span class="p">.</span><span class="n">clearValues</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">color</span><span class="p">.</span><span class="n">float32</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">clear_color</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">clear_color</span><span class="p">.</span><span class="n">w</span><span class="p">;</span>
+      <span class="n">renderer</span><span class="p">.</span><span class="n">clearValues</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">color</span><span class="p">.</span><span class="n">float32</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">clear_color</span><span class="p">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">clear_color</span><span class="p">.</span><span class="n">w</span><span class="p">;</span>
+      <span class="n">renderer</span><span class="p">.</span><span class="n">clearValues</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">color</span><span class="p">.</span><span class="n">float32</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">clear_color</span><span class="p">.</span><span class="n">z</span> <span class="o">*</span> <span class="n">clear_color</span><span class="p">.</span><span class="n">w</span><span class="p">;</span>
+      <span class="n">renderer</span><span class="p">.</span><span class="n">clearValues</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">color</span><span class="p">.</span><span class="n">float32</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">clear_color</span><span class="p">.</span><span class="n">w</span><span class="p">;</span>
+      <span class="c1">// Record dear imgui primitives into command buffer</span>
+      <span class="n">ImGui_ImplVulkan_RenderDrawData</span><span class="p">(</span><span class="n">draw_data</span><span class="p">,</span> <span class="n">commandBuffer</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p><img src="/images/nile_ui_show_off.GIF" alt="" /></p>
+
+<p>The SimpleUI class encapsulates the setup, management, and rendering of ImGui components seamlessly into the application. With ImGui, you can easily create interactive user interfaces for tweaking parameters, visualizing data, and enhancing the debugging process.</p>
+
+<p>Feel free to extend the functionality of the SimpleUI class to include additional ImGui features and cater to the specific needs of your application. Experiment with different ImGui widgets, layouts, and styles to create a user-friendly environment that enhances the overall usability of your graphics application. Happy coding!</p>
+
+<table>
+<tr>
+ 
+ 
+</tr>
+</table>
+<div id="disqus_thread" style="text-align: center">
+	<a href="#" onclick="disqus(); return false;">Show Comments</a>
+</div>
+
+<script type="text/javascript">
+    var disqus_shortname = 'bynmz';
+    var disqus_url = "http://localhost:4000/2024/02/05/simple-ui-with-dear-imgui/";
+	var disqus_loaded = false;
+
+	function disqus() {
+		if (disqus_loaded) return;
+		disqus_loaded = true;
+
+		/* * * DON'T EDIT BELOW THIS LINE * * */
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}
+</script>
+
+	</div>
+	
+</body>
+</html>
