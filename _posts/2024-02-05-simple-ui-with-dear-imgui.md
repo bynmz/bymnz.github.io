@@ -215,7 +215,7 @@ void SimpleUI::renderUI(VkCommandBuffer commandBuffer, NileRenderer& renderer) {
     }
 }
 ```
-![](/images/nile_ui_show_off.GIF)
+![](/images/nile_ui_in_action.png)
 
 The SimpleUI class encapsulates the setup, management, and rendering of ImGui components seamlessly into the application. With ImGui, you can easily create interactive user interfaces for tweaking parameters, visualizing data, and enhancing the debugging process.
 

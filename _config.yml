@@ -2,7 +2,7 @@ name: bynmz.io
 url: https://nileorigin.com
 markdown: kramdown
 permalink: /:year/:month/:day/:title/
-gems:
+plugins:
   - jekyll-redirect-from
 kramdown:
   input: GFM
