@@ -1084,25 +1084,25 @@ The following steps outline how I integrated Dear Imgui into The Nile Engine. If
 </code></pre></div></div>
 <p>We can now initialize a new SimpleUI object from anywhere in our app and start the UI inside the game loop before calling the render method; Make sure you are passing in a valid commandBuffer to the SimpleUI object.</p>
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="n">SimpleUI</span> <span class="n">simpleUI</span><span class="p">{</span>
-    <span class="n">nileDevice</span><span class="p">,</span>
-    <span class="n">nileWindow</span><span class="p">.</span><span class="n">getGLFWwindow</span><span class="p">(),</span>
-    <span class="n">nileRenderer</span><span class="p">.</span><span class="n">getSwapChainRenderPass</span><span class="p">(),</span>
-    <span class="n">nileRenderer</span><span class="p">.</span><span class="n">getImageCount</span><span class="p">()</span>
+    <span class="n">device</span><span class="p">,</span>
+    <span class="n">window</span><span class="p">.</span><span class="n">getGLFWwindow</span><span class="p">(),</span>
+    <span class="n">renderer</span><span class="p">.</span><span class="n">getSwapChainRenderPass</span><span class="p">(),</span>
+    <span class="n">renderer</span><span class="p">.</span><span class="n">getImageCount</span><span class="p">()</span>
   <span class="p">};</span>
-<span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">nileWindow</span><span class="p">.</span><span class="n">shouldClose</span><span class="p">())</span> <span class="p">{</span>
+<span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">window</span><span class="p">.</span><span class="n">shouldClose</span><span class="p">())</span> <span class="p">{</span>
     <span class="n">glfwPollEvents</span><span class="p">();</span>
 
     <span class="c1">// Start the DearImgui frame</span>
     <span class="n">simpleUI</span><span class="p">.</span><span class="n">startUI</span><span class="p">();</span>
 
-    <span class="k">if</span> <span class="p">(</span><span class="k">auto</span> <span class="n">commandBuffer</span> <span class="o">=</span> <span class="n">nileRenderer</span><span class="p">.</span><span class="n">beginFrame</span><span class="p">())</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">auto</span> <span class="n">commandBuffer</span> <span class="o">=</span> <span class="n">renderer</span><span class="p">.</span><span class="n">beginFrame</span><span class="p">())</span> <span class="p">{</span>
       <span class="p">...</span>
 
       <span class="c1">// Begin render pass</span>
       <span class="n">renderer</span><span class="p">.</span><span class="n">beginSwapChainRenderPass</span><span class="p">(</span><span class="n">commandBuffer</span><span class="p">);</span>
 
       <span class="c1">//Render UI</span>
-      <span class="n">simpleUI</span><span class="p">.</span><span class="n">renderUI</span><span class="p">(</span><span class="n">commandBuffer</span><span class="p">,</span> <span class="n">nileRenderer</span><span class="p">);</span>
+      <span class="n">simpleUI</span><span class="p">.</span><span class="n">renderUI</span><span class="p">(</span><span class="n">commandBuffer</span><span class="p">,</span> <span class="n">renderer</span><span class="p">);</span>
 
       <span class="n">renderer</span><span class="p">.</span><span class="n">endSwapChainRenderPass</span><span class="p">(</span><span class="n">commandBuffer</span><span class="p">);</span>
       <span class="n">renderer</span><span class="p">.</span><span class="n">endFrame</span><span class="p">();</span>

@@ -219,25 +219,25 @@ void SimpleUI::renderUI(VkCommandBuffer commandBuffer, Renderer& renderer) {
 We can now initialize a new SimpleUI object from anywhere in our app and start the UI inside the game loop before calling the render method; Make sure you are passing in a valid commandBuffer to the SimpleUI object.
 ```cpp
   SimpleUI simpleUI{
-    nileDevice,
-    nileWindow.getGLFWwindow(),
-    nileRenderer.getSwapChainRenderPass(),
-    nileRenderer.getImageCount()
+    device,
+    window.getGLFWwindow(),
+    renderer.getSwapChainRenderPass(),
+    renderer.getImageCount()
   };
-while (!nileWindow.shouldClose()) {
+while (!window.shouldClose()) {
     glfwPollEvents();
 
     // Start the DearImgui frame
     simpleUI.startUI();
 
-    if (auto commandBuffer = nileRenderer.beginFrame()) {
+    if (auto commandBuffer = renderer.beginFrame()) {
       ...
 
       // Begin render pass
       renderer.beginSwapChainRenderPass(commandBuffer);
 
       //Render UI
-      simpleUI.renderUI(commandBuffer, nileRenderer);
+      simpleUI.renderUI(commandBuffer, renderer);
 
       renderer.endSwapChainRenderPass(commandBuffer);
       renderer.endFrame();
