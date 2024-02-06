@@ -3,8 +3,9 @@ layout: post
 title: Simple UI with Dear Imgui
 ---
 
-I needed a quick and easy solution to implement a UI for The Nile C++ Engine and came across [Dear Imgui](https://github.com/ocornut/imgui).
-The following steps outline how I integrated Dear Imgui into The Nile Engine. If you're not very familiar with Vulkan and graphics APIs and want to follow along with this tutorial, there are several vulkan specification docs and resources online, such as [this one](https://vulkan-tutorial.com/) that can provide a better understanding of the graphics API that I used. Feel free to clone my [vulkan renderer](https://github.com/bynmz/mygraphicsengine), which I will be using here and in future tutorials. You may also modify the renderer to suit your own personal requirements.
+I needed a quick and easy solution to implement a UI for The Nile C++ Engine and came across <a href="https://github.com/ocornut/imgui" target="_blank">Dear Imgui</a>
+.
+The following steps outline how I integrated Dear Imgui into The Nile Engine. If you're not very familiar with Vulkan and graphics APIs and want to follow along with this tutorial, there are several vulkan specification docs and resources online, such as <a href="https://vulkan-tutorial.com/" target="_blank">this one</a> that can provide a better understanding of the graphics API that I used. Feel free to clone my <a href="https://github.com/bynmz/mygraphicsengine" target="_blank">vulkan renderer</a>, which I will be using here and in future tutorials. You may also modify the renderer to suit your own personal requirements.
 
 
 ![](/images/simple_dear_imgui_ui.png)
@@ -30,7 +31,7 @@ Next, I created a new directory ```framework/ui``` for my SimpleUI class header 
 
 simple_ui.hpp:
 
-This is a standard C++ header file where I initialize the member variables, constructor, destructor (for clean programming :)), and a few private/ public methods.
+This is a standard C++ header file where I initialize the member variables, constructor, destructor (for clean programming :)), and a few private/ public methods that we can call in our app.
 
 ```cpp
 class SimpleUI
@@ -38,7 +39,7 @@ class SimpleUI
 private:
 void loadFonts();
 
-NileDevice& mDevice; 
+Device& mDevice; 
 VkRenderPass mRenderPass;
 size_t mImageCount; 
 GLFWwindow* mWindow;
@@ -58,7 +59,7 @@ ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 
 public:
-SimpleUI(NileDevice& device,
+SimpleUI(Device& device,
         GLFWwindow* window,
         VkRenderPass renderPass, 
         size_t imageCount);
@@ -73,14 +74,14 @@ SimpleUI(const SimpleUI &) = delete;
 SimpleUI &operator=(const SimpleUI &) = delete;
 
 void startUI();
-void renderUI(VkCommandBuffer commandBuffer, NileRenderer &renderer);
+void renderUI(VkCommandBuffer commandBuffer, Renderer &renderer);
 
 static void check_vk_result(VkResult err);
 };
 ```
 simple_ui.cpp:
 
-In the implementation we are setting up a Dear Imgui context when the class constructor is called. We are also making sure to cleanup the context and descriptor pool in the destructor.
+In the SimpleUI class implementation we are setting up a Dear Imgui context when the class constructor is called. We are also making sure to cleanup the context and descriptor pool in the destructor.
 
 ```cpp
 #include "simple_ui.hpp"
@@ -200,7 +201,7 @@ void SimpleUI::startUI() {
 }
 
 //Render ImGui and record ImGui primitives into the Vulkan command buffer. The method also updates the clear values in the renderer with the values obtained from ImGui.
-void SimpleUI::renderUI(VkCommandBuffer commandBuffer, NileRenderer& renderer) {
+void SimpleUI::renderUI(VkCommandBuffer commandBuffer, Renderer& renderer) {
     ImGui::Render();
     ImDrawData* draw_data = ImGui::GetDrawData();
     const bool is_minimized = (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f);
@@ -215,6 +216,36 @@ void SimpleUI::renderUI(VkCommandBuffer commandBuffer, NileRenderer& renderer) {
     }
 }
 ```
+We can now initialize a new SimpleUI object from anywhere in our app and start the UI inside the game loop before calling the render method; Make sure you are passing in a valid commandBuffer to the SimpleUI object.
+```cpp
+  SimpleUI simpleUI{
+    nileDevice,
+    nileWindow.getGLFWwindow(),
+    nileRenderer.getSwapChainRenderPass(),
+    nileRenderer.getImageCount()
+  };
+while (!nileWindow.shouldClose()) {
+    glfwPollEvents();
+
+    // Start the DearImgui frame
+    simpleUI.startUI();
+
+    if (auto commandBuffer = nileRenderer.beginFrame()) {
+      ...
+
+      // Begin render pass
+      renderer.beginSwapChainRenderPass(commandBuffer);
+
+      //Render UI
+      simpleUI.renderUI(commandBuffer, nileRenderer);
+
+      renderer.endSwapChainRenderPass(commandBuffer);
+      renderer.endFrame();
+    }
+}
+
+```
+
 ![](/images/nile_ui_in_action.png)
 
 The SimpleUI class encapsulates the setup, management, and rendering of ImGui components seamlessly into the application. With ImGui, you can easily create interactive user interfaces for tweaking parameters, visualizing data, and enhancing the debugging process.

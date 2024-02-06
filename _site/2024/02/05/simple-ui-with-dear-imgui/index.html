@@ -10,7 +10,8 @@
   <meta name="twitter:title" content="Simple UI with Dear Imgui">
 
   
-  <meta name="twitter:description" content="I needed a quick and easy solution to implement a UI for The Nile C++ Engine and came across Dear Imgui.
+  <meta name="twitter:description" content="I needed a quick and easy solution to implement a UI for The Nile C++ Engine and came across Dear Imgui
+.
 The following steps outline how I integrated Dear Imgui into The Nile Engine. If you’re not very familiar with Vulkan and graphics APIs and want to follow along with this tutorial, there are several vulkan specification docs and resources online, such as this one that can provide a better understanding of the graphics API that I used. Feel free to clone my vulkan renderer, which I will be using here and in future tutorials. You may also modify the renderer to suit your own personal requirements.
 
 ">
@@ -24,7 +25,8 @@ The following steps outline how I integrated Dear Imgui into The Nile Engine. If
   <meta property="og:url" content="https://nileorigin.com/2024/02/05/simple-ui-with-dear-imgui/">
 
   
-  <meta property="og:description" content="I needed a quick and easy solution to implement a UI for The Nile C++ Engine and came across Dear Imgui.
+  <meta property="og:description" content="I needed a quick and easy solution to implement a UI for The Nile C++ Engine and came across Dear Imgui
+.
 The following steps outline how I integrated Dear Imgui into The Nile Engine. If you’re not very familiar with Vulkan and graphics APIs and want to follow along with this tutorial, there are several vulkan specification docs and resources online, such as this one that can provide a better understanding of the graphics API that I used. Feel free to clone my vulkan renderer, which I will be using here and in future tutorials. You may also modify the renderer to suit your own personal requirements.
 
 ">
@@ -871,8 +873,9 @@ a.sidebar-nav-item:focus {
 05 Feb 2024
 
 </span>
-<p>I needed a quick and easy solution to implement a UI for The Nile C++ Engine and came across <a href="https://github.com/ocornut/imgui">Dear Imgui</a>.
-The following steps outline how I integrated Dear Imgui into The Nile Engine. If you’re not very familiar with Vulkan and graphics APIs and want to follow along with this tutorial, there are several vulkan specification docs and resources online, such as <a href="https://vulkan-tutorial.com/">this one</a> that can provide a better understanding of the graphics API that I used. Feel free to clone my <a href="https://github.com/bynmz/mygraphicsengine">vulkan renderer</a>, which I will be using here and in future tutorials. You may also modify the renderer to suit your own personal requirements.</p>
+<p>I needed a quick and easy solution to implement a UI for The Nile C++ Engine and came across <a href="https://github.com/ocornut/imgui" target="_blank">Dear Imgui</a>
+.
+The following steps outline how I integrated Dear Imgui into The Nile Engine. If you’re not very familiar with Vulkan and graphics APIs and want to follow along with this tutorial, there are several vulkan specification docs and resources online, such as <a href="https://vulkan-tutorial.com/" target="_blank">this one</a> that can provide a better understanding of the graphics API that I used. Feel free to clone my <a href="https://github.com/bynmz/mygraphicsengine" target="_blank">vulkan renderer</a>, which I will be using here and in future tutorials. You may also modify the renderer to suit your own personal requirements.</p>
 
 <p><img src="/images/simple_dear_imgui_ui.png" alt="" /></p>
 
@@ -896,14 +899,14 @@ The following steps outline how I integrated Dear Imgui into The Nile Engine. If
 
 <p>simple_ui.hpp:</p>
 
-<p>This is a standard C++ header file where I initialize the member variables, constructor, destructor (for clean programming :)), and a few private/ public methods.</p>
+<p>This is a standard C++ header file where I initialize the member variables, constructor, destructor (for clean programming :)), and a few private/ public methods that we can call in our app.</p>
 
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">SimpleUI</span>
 <span class="p">{</span>
 <span class="nl">private:</span>
 <span class="kt">void</span> <span class="n">loadFonts</span><span class="p">();</span>
 
-<span class="n">NileDevice</span><span class="o">&amp;</span> <span class="n">mDevice</span><span class="p">;</span> 
+<span class="n">Device</span><span class="o">&amp;</span> <span class="n">mDevice</span><span class="p">;</span> 
 <span class="n">VkRenderPass</span> <span class="n">mRenderPass</span><span class="p">;</span>
 <span class="kt">size_t</span> <span class="n">mImageCount</span><span class="p">;</span> 
 <span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">mWindow</span><span class="p">;</span>
@@ -923,7 +926,7 @@ The following steps outline how I integrated Dear Imgui into The Nile Engine. If
 
 
 <span class="nl">public:</span>
-<span class="n">SimpleUI</span><span class="p">(</span><span class="n">NileDevice</span><span class="o">&amp;</span> <span class="n">device</span><span class="p">,</span>
+<span class="n">SimpleUI</span><span class="p">(</span><span class="n">Device</span><span class="o">&amp;</span> <span class="n">device</span><span class="p">,</span>
         <span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span>
         <span class="n">VkRenderPass</span> <span class="n">renderPass</span><span class="p">,</span> 
         <span class="kt">size_t</span> <span class="n">imageCount</span><span class="p">);</span>
@@ -938,14 +941,14 @@ The following steps outline how I integrated Dear Imgui into The Nile Engine. If
 <span class="n">SimpleUI</span> <span class="o">&amp;</span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">SimpleUI</span> <span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
 
 <span class="kt">void</span> <span class="n">startUI</span><span class="p">();</span>
-<span class="kt">void</span> <span class="n">renderUI</span><span class="p">(</span><span class="n">VkCommandBuffer</span> <span class="n">commandBuffer</span><span class="p">,</span> <span class="n">NileRenderer</span> <span class="o">&amp;</span><span class="n">renderer</span><span class="p">);</span>
+<span class="kt">void</span> <span class="n">renderUI</span><span class="p">(</span><span class="n">VkCommandBuffer</span> <span class="n">commandBuffer</span><span class="p">,</span> <span class="n">Renderer</span> <span class="o">&amp;</span><span class="n">renderer</span><span class="p">);</span>
 
 <span class="k">static</span> <span class="kt">void</span> <span class="n">check_vk_result</span><span class="p">(</span><span class="n">VkResult</span> <span class="n">err</span><span class="p">);</span>
 <span class="p">};</span>
 </code></pre></div></div>
 <p>simple_ui.cpp:</p>
 
-<p>In the implementation we are setting up a Dear Imgui context when the class constructor is called. We are also making sure to cleanup the context and descriptor pool in the destructor.</p>
+<p>In the SimpleUI class implementation we are setting up a Dear Imgui context when the class constructor is called. We are also making sure to cleanup the context and descriptor pool in the destructor.</p>
 
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include "simple_ui.hpp"
 </span>
@@ -1064,7 +1067,7 @@ The following steps outline how I integrated Dear Imgui into The Nile Engine. If
 <span class="p">}</span>
 
 <span class="c1">//Render ImGui and record ImGui primitives into the Vulkan command buffer. The method also updates the clear values in the renderer with the values obtained from ImGui.</span>
-<span class="kt">void</span> <span class="n">SimpleUI</span><span class="o">::</span><span class="n">renderUI</span><span class="p">(</span><span class="n">VkCommandBuffer</span> <span class="n">commandBuffer</span><span class="p">,</span> <span class="n">NileRenderer</span><span class="o">&amp;</span> <span class="n">renderer</span><span class="p">)</span> <span class="p">{</span>
+<span class="kt">void</span> <span class="n">SimpleUI</span><span class="o">::</span><span class="n">renderUI</span><span class="p">(</span><span class="n">VkCommandBuffer</span> <span class="n">commandBuffer</span><span class="p">,</span> <span class="n">Renderer</span><span class="o">&amp;</span> <span class="n">renderer</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">ImGui</span><span class="o">::</span><span class="n">Render</span><span class="p">();</span>
     <span class="n">ImDrawData</span><span class="o">*</span> <span class="n">draw_data</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetDrawData</span><span class="p">();</span>
     <span class="k">const</span> <span class="kt">bool</span> <span class="n">is_minimized</span> <span class="o">=</span> <span class="p">(</span><span class="n">draw_data</span><span class="o">-&gt;</span><span class="n">DisplaySize</span><span class="p">.</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="n">f</span> <span class="o">||</span> <span class="n">draw_data</span><span class="o">-&gt;</span><span class="n">DisplaySize</span><span class="p">.</span><span class="n">y</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
@@ -1079,6 +1082,35 @@ The following steps outline how I integrated Dear Imgui into The Nile Engine. If
     <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div></div>
+<p>We can now initialize a new SimpleUI object from anywhere in our app and start the UI inside the game loop before calling the render method; Make sure you are passing in a valid commandBuffer to the SimpleUI object.</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="n">SimpleUI</span> <span class="n">simpleUI</span><span class="p">{</span>
+    <span class="n">nileDevice</span><span class="p">,</span>
+    <span class="n">nileWindow</span><span class="p">.</span><span class="n">getGLFWwindow</span><span class="p">(),</span>
+    <span class="n">nileRenderer</span><span class="p">.</span><span class="n">getSwapChainRenderPass</span><span class="p">(),</span>
+    <span class="n">nileRenderer</span><span class="p">.</span><span class="n">getImageCount</span><span class="p">()</span>
+  <span class="p">};</span>
+<span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">nileWindow</span><span class="p">.</span><span class="n">shouldClose</span><span class="p">())</span> <span class="p">{</span>
+    <span class="n">glfwPollEvents</span><span class="p">();</span>
+
+    <span class="c1">// Start the DearImgui frame</span>
+    <span class="n">simpleUI</span><span class="p">.</span><span class="n">startUI</span><span class="p">();</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="k">auto</span> <span class="n">commandBuffer</span> <span class="o">=</span> <span class="n">nileRenderer</span><span class="p">.</span><span class="n">beginFrame</span><span class="p">())</span> <span class="p">{</span>
+      <span class="p">...</span>
+
+      <span class="c1">// Begin render pass</span>
+      <span class="n">renderer</span><span class="p">.</span><span class="n">beginSwapChainRenderPass</span><span class="p">(</span><span class="n">commandBuffer</span><span class="p">);</span>
+
+      <span class="c1">//Render UI</span>
+      <span class="n">simpleUI</span><span class="p">.</span><span class="n">renderUI</span><span class="p">(</span><span class="n">commandBuffer</span><span class="p">,</span> <span class="n">nileRenderer</span><span class="p">);</span>
+
+      <span class="n">renderer</span><span class="p">.</span><span class="n">endSwapChainRenderPass</span><span class="p">(</span><span class="n">commandBuffer</span><span class="p">);</span>
+      <span class="n">renderer</span><span class="p">.</span><span class="n">endFrame</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
 <p><img src="/images/nile_ui_in_action.png" alt="" /></p>
 
 <p>The SimpleUI class encapsulates the setup, management, and rendering of ImGui components seamlessly into the application. With ImGui, you can easily create interactive user interfaces for tweaking parameters, visualizing data, and enhancing the debugging process.</p>
