@@ -61,6 +61,17 @@
   <!-- RSS -->
   <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed/">
 
+  {% if page.math %}
+  <!-- Katex -->
+  <!-- <link rel="stylesheet" href="/katex/katex.min.css">
+  <script type="text/javascript" src="/katex/katex.min.js"></script>
+  <script type="text/javascript" src="/katex/contrib/auto-render.min.js"></script> -->
+  {% endif %}
+
+  {% if site.google_analytics and jekyll.environment == 'production' %}
+  {% include analytics.html %}
+  {% endif %}
+  
 </head>
 <body>
 <div class="sidebar">

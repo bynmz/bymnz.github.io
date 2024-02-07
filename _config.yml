@@ -6,3 +6,4 @@ plugins:
   - jekyll-redirect-from
 kramdown:
   input: GFM
+google_analytics: G-8J2XLEPKGR
