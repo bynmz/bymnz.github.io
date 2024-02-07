@@ -216,7 +216,7 @@ void SimpleUI::renderUI(VkCommandBuffer commandBuffer, Renderer& renderer) {
     }
 }
 ```
-We can now initialize a new SimpleUI object from anywhere in our app and start the UI inside the game loop before calling the render method; Make sure you are passing in a valid commandBuffer to the SimpleUI object.
+We can now initialize a new SimpleUI object from anywhere in our app and start the UI inside the game loop before calling the render method; Make sure you are passing in a valid commandBuffer to the SimpleUI class.
 ```cpp
   SimpleUI simpleUI{
     device,
