@@ -8,7 +8,7 @@ Rust for graphics projects. I enjoy playing with pixels in my spare time :). I'm
 
 ## Work
 
-- <a href="https://bynmz.github.io/images/Ben_Young_Mwanzia_Resume.pdf">Resume</a>
+- <a href="https://bynmz.github.io/images/Ben_Young_Mwanzia_Resume.pdf" target="_blank">Resume</a>
 
 ## Projects
 
