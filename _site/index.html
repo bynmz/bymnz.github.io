@@ -838,6 +838,10 @@ a.sidebar-nav-item:focus {
       <ul style="padding-left: 20px;">
       
         <li>
+          <small><a href="/2024/03/28/offscreen-rendering-in-vulkan/">Offscreen rendering in Vulkan</a></small>
+        </li>
+      
+        <li>
           <small><a href="/2024/02/05/simple-ui-with-dear-imgui/">Simple UI with Dear Imgui</a></small>
         </li>
       
@@ -850,6 +854,9 @@ a.sidebar-nav-item:focus {
 <blockquote>
   <p>Hi. My name is Ben Young Mwanzia. Welcome to my blog.</p>
 </blockquote>
+
+<h3 id="28-march-2024-offscreen-rendering-in-vulkan">28 March 2024 <a href="/2024/03/28/offscreen-rendering-in-vulkan/">Offscreen rendering in Vulkan</a></h3>
+<p>In the <a href="https://bynmz.github.io/2024/02/05/simple-ui-with-dear-imgui/">last post</a> we looked at integrating a simple UI with Dear Imgui using my <a href="https://github.com/bynmz/mygraphicsengine" target="_blank">vulkan renderer</a>. Now we shall look at offscreen rendering. This can be used for various purposes such as post-processing effects, rendering to textures for later use, shadow mapping, reflections etc. In this example we shall look at offscreen rendering for reflections. After having a decent understanding of the Vulkan specification and having gone through the renderer sample code provided, you can follow along or use this as a general guide on how you can implement this in your own projects. The intention of this is not to serve as a tutorial for beginners but as a guide for someone with a good enough understanding of the Vulkan specification and some modern C++ knowledge.</p>
 
 <h3 id="05-february-2024-simple-ui-with-dear-imgui">05 February 2024 <a href="/2024/02/05/simple-ui-with-dear-imgui/">Simple UI with Dear Imgui</a></h3>
 <p>I needed a quick and easy solution to implement a UI for The Nile C++ Engine and came across <a href="https://github.com/ocornut/imgui" target="_blank">Dear Imgui</a>
