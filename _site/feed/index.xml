@@ -690,7 +690,7 @@ The following steps outline how I integrated Dear Imgui into The Nile Engine. If
 
 &lt;p&gt;The SimpleUI class encapsulates the setup, management, and rendering of ImGui components seamlessly into the application. With ImGui, you can easily create interactive user interfaces for tweaking parameters, visualizing data, and enhancing the debugging process.&lt;/p&gt;
 
-&lt;p&gt;Feel free to extend the functionality of the SimpleUI class to include additional ImGui features and cater to the specific needs of your application. Experiment with different ImGui widgets, layouts, and styles to create a user-friendly environment that enhances the overall usability of your graphics application. Happy coding!&lt;/p&gt;
+&lt;p&gt;Feel free to extend the functionality of the SimpleUI class to include additional ImGui features and cater to the specific needs of your application. Experiment with different ImGui widgets, layouts, and styles to create a user-friendly environment that enhances the overall usability of your graphics application.&lt;/p&gt;
 </description>
 			<pubDate>Mon, 05 Feb 2024 00:00:00 +0300</pubDate>
 			<link>http://localhost:4000/2024/02/05/simple-ui-with-dear-imgui/</link>
