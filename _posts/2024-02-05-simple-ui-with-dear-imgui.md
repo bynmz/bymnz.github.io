@@ -157,8 +157,9 @@ In the SimpleUI class implementation we are setting up a Dear Imgui context when
         if (err < 0)
             abort();
     }
-
-// Initializes ImGui for a new frame.
+```
+Initializes ImGui for a new frame.
+```cpp
 void SimpleUI::startUI() {
     ImGui_ImplVulkan_NewFrame();
     ImGui_ImplGlfw_NewFrame();
