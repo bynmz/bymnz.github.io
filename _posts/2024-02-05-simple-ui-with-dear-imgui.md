@@ -246,5 +246,3 @@ while (!window.shouldClose()) {
 ![](/images/nile_ui_in_action.png)
 
 The SimpleUI class encapsulates the setup, management, and rendering of ImGui components seamlessly into the application. With ImGui, you can easily create interactive user interfaces for tweaking parameters, visualizing data, and enhancing the debugging process.
-
-Feel free to extend the functionality of the SimpleUI class to include additional ImGui features and cater to the specific needs of your application. Experiment with different ImGui widgets, layouts, and styles to create a user-friendly environment that enhances the overall usability of your graphics application.
