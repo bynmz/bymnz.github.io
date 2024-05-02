@@ -8,8 +8,8 @@ In the <a href="https://bynmz.github.io/2024/02/05/simple-ui-with-dear-imgui/">l
 To start, I encapsulated the following into a new `offScreen.cpp` class; 
 
 
+In the constructor I initialize the offscreen renderer with a specified device and set the width and height of the offscreen framebuffer. This also calls the `init()` function to perform initialization tasks.
 ```cpp
-// In the constructor I initialize the offscreen renderer with a specified device and set the width and height of the offscreen framebuffer. This also calls the `init()` function to perform initialization tasks.
 OffScreen::OffScreen(Device &deviceRef)
 : device{deviceRef}
 {
@@ -17,9 +17,9 @@ OffScreen::OffScreen(Device &deviceRef)
     offscreenPass.height = FB_DIM;
     init();
 }
-
-
-// The init() method calls various functions to create the necessary Vulkan objects for offscreen rendering, such as images, image views, samplers, depth resources, render passes and framebuffers. The descriptor is also updated with the image layout for later use in a descriptor set.
+```
+The init() method calls various functions to create the necessary Vulkan objects for offscreen rendering, such as images, image views, samplers, depth resources, render passes and framebuffers. The descriptor is also updated with the image layout for later use in a descriptor set.
+```cpp
 void OffScreen::init()
 {
     createImage();
@@ -30,8 +30,9 @@ void OffScreen::init()
     createFramebuffers();
     updateDescriptor();
 }
-
-// The destructor destroys Vulkan objects created during initialization, such as samplers, image views, images, memory, framebuffers and render passes.
+```
+The destructor destroys Vulkan objects created during initialization, such as samplers, image views, images, memory, framebuffers and render passes.
+```cpp
 OffScreen::~OffScreen()
 {
   // Sampler
@@ -52,15 +53,17 @@ OffScreen::~OffScreen()
   vkDestroyImage(device.device(), offscreenPass.depth.image, nullptr);
   vkFreeMemory(device.device(), offscreenPass.depth.mem, nullptr);
 }
-
-// The updateDescriptor() method fills a descriptor structure with information about the offscreen color image, including its layout and sampler.
+```
+The updateDescriptor() method fills a descriptor structure with information about the offscreen color image, including its layout and sampler.
+```cpp
 void OffScreen::updateDescriptor() {
   offscreenPass.descriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
   offscreenPass.descriptor.imageView = offscreenPass.color.view;
   offscreenPass.descriptor.sampler = offscreenPass.sampler;
 }
-
-// Next, a Vulkan image object representing the offscreen color attachment is created. The format, extend, usage and memory properties of the image are also specified.
+```
+Next, a Vulkan image object representing the offscreen color attachment is created. The format, extend, usage and memory properties of the image are also specified.
+```cpp
 void OffScreen::createImage() {
   		// Color attachment
 		VkImageCreateInfo image{};
@@ -83,8 +86,9 @@ void OffScreen::createImage() {
         offscreenPass.color.image,
         offscreenPass.color.mem);
 }
-
-// The Vulkan image view object is created for the offscreen color image. The format and subresource range of the image view is also specified.
+```
+The Vulkan image view object is created for the offscreen color image. The format and subresource range of the image view is also specified.
+```cpp
 void OffScreen::createImageView() {
     VkImageViewCreateInfo viewInfo{};
     viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
@@ -102,8 +106,9 @@ void OffScreen::createImageView() {
       throw std::runtime_error("failed to create texture image view!");
     }
 }
-
-// Create a Vulkan sampler object for sampling the offscreen color image. Parameters such as filtering, addressing mode and mipmapping are also specified.
+```
+Create a Vulkan sampler object for sampling the offscreen color image. Parameters such as filtering, addressing mode and mipmapping are also specified.
+```cpp
 void OffScreen::createSampler() {
       VkSamplerCreateInfo samplerInfo{};
       samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
@@ -132,8 +137,9 @@ void OffScreen::createSampler() {
           throw std::runtime_error("failed to create texture sampler!");
       }
 }
-
-// A Vulkan render pass object is created for defining the sequence of rendering operations. Attachment descriptions for color and depth attachments are specified. Subpasses and dependencies between rendering operations are defined.
+```
+A Vulkan render pass object is created for defining the sequence of rendering operations. Attachment descriptions for color and depth attachments are specified. Subpasses and dependencies between rendering operations are defined.
+```cpp
 void OffScreen::createRenderPass() {
   VkAttachmentDescription depthAttachment{};
   depthAttachment.format = findDepthFormat();
@@ -202,8 +208,9 @@ void OffScreen::createRenderPass() {
     throw std::runtime_error("failed to create render pass!");
   }
 }
-
-// Create Vulkan framebuffer objects for rending into the offscreen color and depth attachments. This associates the framebuffers with the render pass.
+```
+Create Vulkan framebuffer objects for rending into the offscreen color and depth attachments. This associates the framebuffers with the render pass.
+```cpp
 void OffScreen::createFramebuffers() {
   std::array<VkImageView, 2> attachments = {offscreenPass.color.view, offscreenPass.depth.view};
 
@@ -224,8 +231,9 @@ void OffScreen::createFramebuffers() {
     throw std::runtime_error("failed to create framebuffer!");
   }
 }
-
-// Create a Vulkan image object representing the offscreen depth attachment, create a Vulkan image view object for the depth attachment and specifies the format, extent, usage and memory properties of the depth image.
+```
+Create a Vulkan image object representing the offscreen depth attachment, create a Vulkan image view object for the depth attachment and specifies the format, extent, usage and memory properties of the depth image.
+```cpp
 void OffScreen::createDepthResources() {
   VkFormat depthFormat = findDepthFormat();
     // Color attachment
@@ -276,14 +284,15 @@ VkFormat OffScreen::findDepthFormat() {
       VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT);
 }
 ```
-Now in the renderer class `renderer.cpp`, we can create an offscreen object.
+In the renderer class `renderer.cpp`, we can create an offscreen object.
 {% raw %}
 ```cpp
 void Renderer::createOffScreen() {
     OffScreen = std::make_unique<OffScreen>(device);
 }
-
-// begin and end the offscreen renderpass
+```
+To begin and end the offscreen renderpass
+```cpp
 void Renderer::beginOffScreenRenderPass(VkCommandBuffer commandBuffer) {
   assert(isFrameStarted && "Can't call beginSwapChainRenderPass if frame is not in progress");
   assert(
@@ -331,8 +340,8 @@ In the interest of keeping this post short, the code for implementing them can b
 
 Back to our app `App3D.cpp`
 
+Initialize a RenderSystem object for our pipeline creation and rendering. This expects a device, a swapchain/ offscreen renderpass and a global descriptor set layout
 ```cpp
-// Initialize a RenderSystem object for our pipeline creation and rendering. This expects a device, a swapchain/ offscreen renderpass and a global descriptor set layout
 void App3D::loop() {
   RenderSystem3D objMirrored{
       device,
@@ -383,7 +392,7 @@ void App3D::loop() {
     ...
 }
 ```
-Now we can use the global descriptor set layout in our app during the pipeline creation stage.
+Use the global descriptor set layout in our app during the pipeline creation stage.
 
 `mirror_system.cpp`
 ```cpp
