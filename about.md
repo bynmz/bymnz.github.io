@@ -30,7 +30,7 @@ EV fleet management mobile application. GIS, real time asset tracking and chargi
 
 ## Resume
 
-- <a href="https://bynmz.github.io/images/Ben_Young_Mwanzia_Resume.pdf" target="_blank">Ben_Young_Mwanzia_Resume.pdf</a>
+- <a href="https://bynmz.github.io/images/Ben_Young_Mwanzia_Resume.pdf" target="_blank">Link</a>
 
 ## Contacts
 
