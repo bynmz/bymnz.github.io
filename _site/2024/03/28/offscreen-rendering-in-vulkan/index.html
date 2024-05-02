@@ -824,13 +824,19 @@ a.sidebar-nav-item:focus {
 <div class="sidebar">
   <div class="container">
     <div class="sidebar-about">
-      <p class="lead"><a href="/"><nobr>Automotive software, web, <br/> mobile and game <br/> developer. Polyglot :)</nobr></a></p>
+      <p class="lead"><a href="/"><nobr>Automotive software, <br/> mobile/ web, and game <br/> development</nobr></a></p>
     </div>
 
     
     <div class="sidebar-mini">
 	    Ben&nbsp;Young&nbsp;Mwanzia&nbsp;<br/>
-        <small><a href="https://twitter.com/_benng__"><img src="/images/twitter.svg" width="20" height="20" style="display: inline; vertical-align: -22px;" /></a>,&nbsp;<a href="https://mastodon.gamedev.place/@bynmz"><img src="/images/mastodon.svg" width="16" height="16" style="display: inline; vertical-align: -21px;" /></a>,&nbsp;<a href="https://youtube.com/@benng5517"><img src="/images/youtube.svg" width="16" height="16" style="display: inline; vertical-align: -21px;" /></a>,&nbsp;<a href="mailto:youngmwanzia@gmail.com">email</a></small>
+        <small>
+          <a href="https://twitter.com/_benng__"><img src="/images/twitter.svg" width="20" height="20" style="display: inline; vertical-align: -22px;" /></a>,
+          &nbsp;<a href="https://mastodon.gamedev.place/@bynmz"><img src="/images/mastodon.svg" width="16" height="16" style="display: inline; vertical-align: -21px;" /></a>,
+          &nbsp;<a href="https://youtube.com/@benng5517"><img src="/images/youtube.svg" width="16" height="16" style="display: inline; vertical-align: -21px;" /></a>,
+          &nbsp;<a href="mailto:youngmwanzia@gmail.com">email</a>,
+          &nbsp;<a href="https://github.com/bynmz"><img src="/images/github-mark-white.svg" width="16" height="16" style="display: inline; vertical-align: -21px;" /></a>,
+        </small>
     </div>
 
     <div class="sidebar-content">
@@ -838,7 +844,13 @@ a.sidebar-nav-item:focus {
       <h4>Posts Author</h4>
       <p>
         Ben&nbsp;Young&nbsp;Mwanzia&nbsp;<br/>
-        <small><a href="https://twitter.com/_benng__"><img src="/images/twitter.svg" width="20" height="20" style="display: inline; vertical-align: -22px;" /></a>,&nbsp;<a href="https://mastodon.gamedev.place/@bynmz"><img src="/images/mastodon.svg" width="16" height="16" style="display: inline; vertical-align: -21px;" /></a>,&nbsp;<a href="https://youtube.com/@benng5517"><img src="/images/youtube.svg" width="16" height="16" style="display: inline; vertical-align: -21px;" /></a>,&nbsp;<a href="mailto:youngmwanzia@gmail.com">email</a></small>
+        <small>
+          <a href="https://twitter.com/_benng__"><img src="/images/twitter.svg" width="20" height="20" style="display: inline; vertical-align: -22px;" /></a>,
+          &nbsp;<a href="https://mastodon.gamedev.place/@bynmz"><img src="/images/mastodon.svg" width="16" height="16" style="display: inline; vertical-align: -21px;" /></a>,
+          &nbsp;<a href="https://youtube.com/@benng5517"><img src="/images/youtube.svg" width="16" height="16" style="display: inline; vertical-align: -21px;" /></a>,
+          &nbsp;<a href="mailto:youngmwanzia@gmail.com">email</a>,
+          &nbsp;<a href="https://github.com/bynmz"><img src="/images/github-mark-white.svg" width="16" height="16" style="display: inline; vertical-align: -21px;" /></a>
+        </small>
       </p>
       <p>
       <a href="/about/">Work and about</a>
@@ -885,18 +897,17 @@ a.sidebar-nav-item:focus {
 
 <p>To start, I encapsulated the following into a new <code class="language-plaintext highlighter-rouge">offScreen.cpp</code> class;</p>
 
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// In the constructor I initialize the offscreen renderer with a specified device and set the width and height of the offscreen framebuffer. This also calls the `init()` function to perform initialization tasks.</span>
-<span class="n">OffScreen</span><span class="o">::</span><span class="n">OffScreen</span><span class="p">(</span><span class="n">Device</span> <span class="o">&amp;</span><span class="n">deviceRef</span><span class="p">)</span>
+<p>In the constructor I initialize the offscreen renderer with a specified device and set the width and height of the offscreen framebuffer. This also calls the <code class="language-plaintext highlighter-rouge">init()</code> function to perform initialization tasks.</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">OffScreen</span><span class="o">::</span><span class="n">OffScreen</span><span class="p">(</span><span class="n">Device</span> <span class="o">&amp;</span><span class="n">deviceRef</span><span class="p">)</span>
 <span class="o">:</span> <span class="n">device</span><span class="p">{</span><span class="n">deviceRef</span><span class="p">}</span>
 <span class="p">{</span>
     <span class="n">offscreenPass</span><span class="p">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">FB_DIM</span><span class="p">;</span>
     <span class="n">offscreenPass</span><span class="p">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">FB_DIM</span><span class="p">;</span>
     <span class="n">init</span><span class="p">();</span>
 <span class="p">}</span>
-
-
-<span class="c1">// The init() method calls various functions to create the necessary Vulkan objects for offscreen rendering, such as images, image views, samplers, depth resources, render passes and framebuffers. The descriptor is also updated with the image layout for later use in a descriptor set.</span>
-<span class="kt">void</span> <span class="n">OffScreen</span><span class="o">::</span><span class="n">init</span><span class="p">()</span>
+</code></pre></div></div>
+<p>The init() method calls various functions to create the necessary Vulkan objects for offscreen rendering, such as images, image views, samplers, depth resources, render passes and framebuffers. The descriptor is also updated with the image layout for later use in a descriptor set.</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">OffScreen</span><span class="o">::</span><span class="n">init</span><span class="p">()</span>
 <span class="p">{</span>
     <span class="n">createImage</span><span class="p">();</span>
     <span class="n">createImageView</span><span class="p">();</span>
@@ -906,9 +917,9 @@ a.sidebar-nav-item:focus {
     <span class="n">createFramebuffers</span><span class="p">();</span>
     <span class="n">updateDescriptor</span><span class="p">();</span>
 <span class="p">}</span>
-
-<span class="c1">// The destructor destroys Vulkan objects created during initialization, such as samplers, image views, images, memory, framebuffers and render passes.</span>
-<span class="n">OffScreen</span><span class="o">::~</span><span class="n">OffScreen</span><span class="p">()</span>
+</code></pre></div></div>
+<p>The destructor destroys Vulkan objects created during initialization, such as samplers, image views, images, memory, framebuffers and render passes.</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">OffScreen</span><span class="o">::~</span><span class="n">OffScreen</span><span class="p">()</span>
 <span class="p">{</span>
   <span class="c1">// Sampler</span>
   <span class="n">vkDestroySampler</span><span class="p">(</span><span class="n">device</span><span class="p">.</span><span class="n">device</span><span class="p">(),</span> <span class="n">offscreenPass</span><span class="p">.</span><span class="n">sampler</span><span class="p">,</span> <span class="nb">nullptr</span><span class="p">);</span>
@@ -928,16 +939,16 @@ a.sidebar-nav-item:focus {
   <span class="n">vkDestroyImage</span><span class="p">(</span><span class="n">device</span><span class="p">.</span><span class="n">device</span><span class="p">(),</span> <span class="n">offscreenPass</span><span class="p">.</span><span class="n">depth</span><span class="p">.</span><span class="n">image</span><span class="p">,</span> <span class="nb">nullptr</span><span class="p">);</span>
   <span class="n">vkFreeMemory</span><span class="p">(</span><span class="n">device</span><span class="p">.</span><span class="n">device</span><span class="p">(),</span> <span class="n">offscreenPass</span><span class="p">.</span><span class="n">depth</span><span class="p">.</span><span class="n">mem</span><span class="p">,</span> <span class="nb">nullptr</span><span class="p">);</span>
 <span class="p">}</span>
-
-<span class="c1">// The updateDescriptor() method fills a descriptor structure with information about the offscreen color image, including its layout and sampler.</span>
-<span class="kt">void</span> <span class="n">OffScreen</span><span class="o">::</span><span class="n">updateDescriptor</span><span class="p">()</span> <span class="p">{</span>
+</code></pre></div></div>
+<p>The updateDescriptor() method fills a descriptor structure with information about the offscreen color image, including its layout and sampler.</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">OffScreen</span><span class="o">::</span><span class="n">updateDescriptor</span><span class="p">()</span> <span class="p">{</span>
   <span class="n">offscreenPass</span><span class="p">.</span><span class="n">descriptor</span><span class="p">.</span><span class="n">imageLayout</span> <span class="o">=</span> <span class="n">VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL</span><span class="p">;</span>
   <span class="n">offscreenPass</span><span class="p">.</span><span class="n">descriptor</span><span class="p">.</span><span class="n">imageView</span> <span class="o">=</span> <span class="n">offscreenPass</span><span class="p">.</span><span class="n">color</span><span class="p">.</span><span class="n">view</span><span class="p">;</span>
   <span class="n">offscreenPass</span><span class="p">.</span><span class="n">descriptor</span><span class="p">.</span><span class="n">sampler</span> <span class="o">=</span> <span class="n">offscreenPass</span><span class="p">.</span><span class="n">sampler</span><span class="p">;</span>
 <span class="p">}</span>
-
-<span class="c1">// Next, a Vulkan image object representing the offscreen color attachment is created. The format, extend, usage and memory properties of the image are also specified.</span>
-<span class="kt">void</span> <span class="n">OffScreen</span><span class="o">::</span><span class="n">createImage</span><span class="p">()</span> <span class="p">{</span>
+</code></pre></div></div>
+<p>Next, a Vulkan image object representing the offscreen color attachment is created. The format, extend, usage and memory properties of the image are also specified.</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">OffScreen</span><span class="o">::</span><span class="n">createImage</span><span class="p">()</span> <span class="p">{</span>
   		<span class="c1">// Color attachment</span>
 		<span class="n">VkImageCreateInfo</span> <span class="n">image</span><span class="p">{};</span>
     <span class="n">image</span><span class="p">.</span><span class="n">sType</span> <span class="o">=</span> <span class="n">VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO</span><span class="p">;</span>
@@ -959,9 +970,9 @@ a.sidebar-nav-item:focus {
         <span class="n">offscreenPass</span><span class="p">.</span><span class="n">color</span><span class="p">.</span><span class="n">image</span><span class="p">,</span>
         <span class="n">offscreenPass</span><span class="p">.</span><span class="n">color</span><span class="p">.</span><span class="n">mem</span><span class="p">);</span>
 <span class="p">}</span>
-
-<span class="c1">// The Vulkan image view object is created for the offscreen color image. The format and subresource range of the image view is also specified.</span>
-<span class="kt">void</span> <span class="n">OffScreen</span><span class="o">::</span><span class="n">createImageView</span><span class="p">()</span> <span class="p">{</span>
+</code></pre></div></div>
+<p>The Vulkan image view object is created for the offscreen color image. The format and subresource range of the image view is also specified.</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">OffScreen</span><span class="o">::</span><span class="n">createImageView</span><span class="p">()</span> <span class="p">{</span>
     <span class="n">VkImageViewCreateInfo</span> <span class="n">viewInfo</span><span class="p">{};</span>
     <span class="n">viewInfo</span><span class="p">.</span><span class="n">sType</span> <span class="o">=</span> <span class="n">VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO</span><span class="p">;</span>
     <span class="n">viewInfo</span><span class="p">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">offscreenPass</span><span class="p">.</span><span class="n">color</span><span class="p">.</span><span class="n">image</span><span class="p">;</span>
@@ -978,9 +989,9 @@ a.sidebar-nav-item:focus {
       <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">"failed to create texture image view!"</span><span class="p">);</span>
     <span class="p">}</span>
 <span class="p">}</span>
-
-<span class="c1">// Create a Vulkan sampler object for sampling the offscreen color image. Parameters such as filtering, addressing mode and mipmapping are also specified.</span>
-<span class="kt">void</span> <span class="n">OffScreen</span><span class="o">::</span><span class="n">createSampler</span><span class="p">()</span> <span class="p">{</span>
+</code></pre></div></div>
+<p>Create a Vulkan sampler object for sampling the offscreen color image. Parameters such as filtering, addressing mode and mipmapping are also specified.</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">OffScreen</span><span class="o">::</span><span class="n">createSampler</span><span class="p">()</span> <span class="p">{</span>
       <span class="n">VkSamplerCreateInfo</span> <span class="n">samplerInfo</span><span class="p">{};</span>
       <span class="n">samplerInfo</span><span class="p">.</span><span class="n">sType</span> <span class="o">=</span> <span class="n">VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO</span><span class="p">;</span>
       <span class="n">samplerInfo</span><span class="p">.</span><span class="n">magFilter</span> <span class="o">=</span> <span class="n">VK_FILTER_LINEAR</span><span class="p">;</span>
@@ -1008,9 +1019,9 @@ a.sidebar-nav-item:focus {
           <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">"failed to create texture sampler!"</span><span class="p">);</span>
       <span class="p">}</span>
 <span class="p">}</span>
-
-<span class="c1">// A Vulkan render pass object is created for defining the sequence of rendering operations. Attachment descriptions for color and depth attachments are specified. Subpasses and dependencies between rendering operations are defined.</span>
-<span class="kt">void</span> <span class="n">OffScreen</span><span class="o">::</span><span class="n">createRenderPass</span><span class="p">()</span> <span class="p">{</span>
+</code></pre></div></div>
+<p>A Vulkan render pass object is created for defining the sequence of rendering operations. Attachment descriptions for color and depth attachments are specified. Subpasses and dependencies between rendering operations are defined.</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">OffScreen</span><span class="o">::</span><span class="n">createRenderPass</span><span class="p">()</span> <span class="p">{</span>
   <span class="n">VkAttachmentDescription</span> <span class="n">depthAttachment</span><span class="p">{};</span>
   <span class="n">depthAttachment</span><span class="p">.</span><span class="n">format</span> <span class="o">=</span> <span class="n">findDepthFormat</span><span class="p">();</span>
   <span class="n">depthAttachment</span><span class="p">.</span><span class="n">samples</span> <span class="o">=</span> <span class="n">VK_SAMPLE_COUNT_1_BIT</span><span class="p">;</span>
@@ -1078,9 +1089,9 @@ a.sidebar-nav-item:focus {
     <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">"failed to create render pass!"</span><span class="p">);</span>
   <span class="p">}</span>
 <span class="p">}</span>
-
-<span class="c1">// Create Vulkan framebuffer objects for rending into the offscreen color and depth attachments. This associates the framebuffers with the render pass.</span>
-<span class="kt">void</span> <span class="n">OffScreen</span><span class="o">::</span><span class="n">createFramebuffers</span><span class="p">()</span> <span class="p">{</span>
+</code></pre></div></div>
+<p>Create Vulkan framebuffer objects for rending into the offscreen color and depth attachments. This associates the framebuffers with the render pass.</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">OffScreen</span><span class="o">::</span><span class="n">createFramebuffers</span><span class="p">()</span> <span class="p">{</span>
   <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="n">VkImageView</span><span class="p">,</span> <span class="mi">2</span><span class="o">&gt;</span> <span class="n">attachments</span> <span class="o">=</span> <span class="p">{</span><span class="n">offscreenPass</span><span class="p">.</span><span class="n">color</span><span class="p">.</span><span class="n">view</span><span class="p">,</span> <span class="n">offscreenPass</span><span class="p">.</span><span class="n">depth</span><span class="p">.</span><span class="n">view</span><span class="p">};</span>
 
   <span class="n">VkFramebufferCreateInfo</span> <span class="n">framebufferInfo</span> <span class="o">=</span> <span class="p">{};</span>
@@ -1100,9 +1111,9 @@ a.sidebar-nav-item:focus {
     <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">"failed to create framebuffer!"</span><span class="p">);</span>
   <span class="p">}</span>
 <span class="p">}</span>
-
-<span class="c1">// Create a Vulkan image object representing the offscreen depth attachment, create a Vulkan image view object for the depth attachment and specifies the format, extent, usage and memory properties of the depth image.</span>
-<span class="kt">void</span> <span class="n">OffScreen</span><span class="o">::</span><span class="n">createDepthResources</span><span class="p">()</span> <span class="p">{</span>
+</code></pre></div></div>
+<p>Create a Vulkan image object representing the offscreen depth attachment, create a Vulkan image view object for the depth attachment and specifies the format, extent, usage and memory properties of the depth image.</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">OffScreen</span><span class="o">::</span><span class="n">createDepthResources</span><span class="p">()</span> <span class="p">{</span>
   <span class="n">VkFormat</span> <span class="n">depthFormat</span> <span class="o">=</span> <span class="n">findDepthFormat</span><span class="p">();</span>
     <span class="c1">// Color attachment</span>
     <span class="n">VkImageCreateInfo</span> <span class="n">imageInfo</span><span class="p">{};</span>
@@ -1152,14 +1163,14 @@ a.sidebar-nav-item:focus {
       <span class="n">VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div></div>
-<p>Now in the renderer class <code class="language-plaintext highlighter-rouge">renderer.cpp</code>, we can create an offscreen object.</p>
+<p>In the renderer class <code class="language-plaintext highlighter-rouge">renderer.cpp</code>, we can create an offscreen object.</p>
 
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">Renderer</span><span class="o">::</span><span class="n">createOffScreen</span><span class="p">()</span> <span class="p">{</span>
     <span class="n">OffScreen</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">OffScreen</span><span class="o">&gt;</span><span class="p">(</span><span class="n">device</span><span class="p">);</span>
 <span class="p">}</span>
-
-<span class="c1">// begin and end the offscreen renderpass</span>
-<span class="kt">void</span> <span class="n">Renderer</span><span class="o">::</span><span class="n">beginOffScreenRenderPass</span><span class="p">(</span><span class="n">VkCommandBuffer</span> <span class="n">commandBuffer</span><span class="p">)</span> <span class="p">{</span>
+</code></pre></div></div>
+<p>To begin and end the offscreen renderpass</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">Renderer</span><span class="o">::</span><span class="n">beginOffScreenRenderPass</span><span class="p">(</span><span class="n">VkCommandBuffer</span> <span class="n">commandBuffer</span><span class="p">)</span> <span class="p">{</span>
   <span class="n">assert</span><span class="p">(</span><span class="n">isFrameStarted</span> <span class="o">&amp;&amp;</span> <span class="s">"Can't call beginSwapChainRenderPass if frame is not in progress"</span><span class="p">);</span>
   <span class="n">assert</span><span class="p">(</span>
       <span class="n">commandBuffer</span> <span class="o">==</span> <span class="n">getCurrentCommandBuffer</span><span class="p">()</span> <span class="o">&amp;&amp;</span>
@@ -1206,8 +1217,8 @@ a.sidebar-nav-item:focus {
 
 <p>Back to our app <code class="language-plaintext highlighter-rouge">App3D.cpp</code></p>
 
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Initialize a RenderSystem object for our pipeline creation and rendering. This expects a device, a swapchain/ offscreen renderpass and a global descriptor set layout</span>
-<span class="kt">void</span> <span class="n">App3D</span><span class="o">::</span><span class="n">loop</span><span class="p">()</span> <span class="p">{</span>
+<p>Initialize a RenderSystem object for our pipeline creation and rendering. This expects a device, a swapchain/ offscreen renderpass and a global descriptor set layout</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">App3D</span><span class="o">::</span><span class="n">loop</span><span class="p">()</span> <span class="p">{</span>
   <span class="n">RenderSystem3D</span> <span class="n">objMirrored</span><span class="p">{</span>
       <span class="n">device</span><span class="p">,</span>
       <span class="n">Renderer</span><span class="p">.</span><span class="n">getOffScreenRenderPass</span><span class="p">(),</span>
@@ -1257,7 +1268,7 @@ a.sidebar-nav-item:focus {
     <span class="p">...</span>
 <span class="p">}</span>
 </code></pre></div></div>
-<p>Now we can use the global descriptor set layout in our app during the pipeline creation stage.</p>
+<p>Use the global descriptor set layout in our app during the pipeline creation stage.</p>
 
 <p><code class="language-plaintext highlighter-rouge">mirror_system.cpp</code></p>
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">MirrorSystem</span><span class="o">::</span><span class="n">createPipelineLayout</span><span class="p">(</span><span class="n">VkDescriptorSetLayout</span> <span class="n">offscreenSetLayout</span><span class="p">)</span> <span class="p">{</span>
