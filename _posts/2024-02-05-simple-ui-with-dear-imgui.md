@@ -32,7 +32,7 @@ Create a standard C++ header file ```simpleUI.hpp``` and initialize the member v
 ```cpp
 class SimpleUI
 {
-private:sim
+private:
 void loadFonts();
 
 Device& mDevice; 
