@@ -12,8 +12,6 @@ The following steps outline how I integrated Dear Imgui into The Nile Engine. If
 
 First, I copied the Dear imgui library into the ```external/imgui``` directory and added it's path to cmake.
 
-CMakeLists.txt:
-
 ```cmake
 include_directories(external)
 
@@ -29,14 +27,12 @@ add_executable(${PROJECT_NAME} ${SOURCES} ${IMGUI_PATH}/backends/imgui_impl_glfw
 ```
 Next, I created a new directory ```framework/ui``` for my SimpleUI class header and implementation files.
 
-simple_ui.hpp:
-
-This is a standard C++ header file where I initialize the member variables, constructor, destructor (for clean programming :)), and a few private/ public methods that we can call in our app.
+Create a standard C++ header file ```simpleUI.hpp``` and initialize the member variables, constructor, destructor (for clean programming :)), and a few private/ public methods that we can call in our app.
 
 ```cpp
 class SimpleUI
 {
-private:
+private:sim
 void loadFonts();
 
 Device& mDevice; 
@@ -79,8 +75,6 @@ void renderUI(VkCommandBuffer commandBuffer, Renderer &renderer);
 static void check_vk_result(VkResult err);
 };
 ```
-simple_ui.cpp:
-
 In the SimpleUI class implementation we are setting up a Dear Imgui context when the class constructor is called. We are also making sure to cleanup the context and descriptor pool in the destructor.
 
 ```cpp
@@ -199,8 +193,9 @@ void SimpleUI::startUI() {
         ImGui::End();
     }
 }
-
-//Render ImGui and record ImGui primitives into the Vulkan command buffer. The method also updates the clear values in the renderer with the values obtained from ImGui.
+```
+Render ImGui and record ImGui primitives into the Vulkan command buffer. The method also updates the clear values in the renderer with the values obtained from ImGui.
+```cpp
 void SimpleUI::renderUI(VkCommandBuffer commandBuffer, Renderer& renderer) {
     ImGui::Render();
     ImDrawData* draw_data = ImGui::GetDrawData();
@@ -216,14 +211,15 @@ void SimpleUI::renderUI(VkCommandBuffer commandBuffer, Renderer& renderer) {
     }
 }
 ```
-We can now initialize a new SimpleUI object from anywhere in our app and start the UI inside the game loop before calling the render method; Make sure you are passing in a valid commandBuffer to the SimpleUI class.
+Initialize a new SimpleUI object from anywhere in our app and start the UI inside the game loop before calling the render method; Make sure you are passing in a valid commandBuffer to the SimpleUI class.
 ```cpp
-  SimpleUI simpleUI{
+SimpleUI simpleUI{
     device,
     window.getGLFWwindow(),
     renderer.getSwapChainRenderPass(),
     renderer.getImageCount()
-  };
+};
+
 while (!window.shouldClose()) {
     glfwPollEvents();
 

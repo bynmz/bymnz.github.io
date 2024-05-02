@@ -455,8 +455,6 @@ The following steps outline how I integrated Dear Imgui into The Nile Engine. If
 
 &lt;p&gt;First, I copied the Dear imgui library into the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;external/imgui&lt;/code&gt; directory and added it’s path to cmake.&lt;/p&gt;
 
-&lt;p&gt;CMakeLists.txt:&lt;/p&gt;
-
 &lt;div class=&quot;language-cmake highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;include_directories&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;external&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
 &lt;span class=&quot;c1&quot;&gt;# If IMGUI_PATH not specified in .env.cmake, try fetching from git repo&lt;/span&gt;
@@ -471,13 +469,11 @@ The following steps outline how I integrated Dear Imgui into The Nile Engine. If
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;Next, I created a new directory &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;framework/ui&lt;/code&gt; for my SimpleUI class header and implementation files.&lt;/p&gt;
 
-&lt;p&gt;simple_ui.hpp:&lt;/p&gt;
-
-&lt;p&gt;This is a standard C++ header file where I initialize the member variables, constructor, destructor (for clean programming :)), and a few private/ public methods that we can call in our app.&lt;/p&gt;
+&lt;p&gt;Create a standard C++ header file &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;simpleUI.hpp&lt;/code&gt; and initialize the member variables, constructor, destructor (for clean programming :)), and a few private/ public methods that we can call in our app.&lt;/p&gt;
 
 &lt;div class=&quot;language-cpp highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SimpleUI&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-&lt;span class=&quot;nl&quot;&gt;private:&lt;/span&gt;
+&lt;span class=&quot;nl&quot;&gt;private:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sim&lt;/span&gt;
 &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;loadFonts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
 
 &lt;span class=&quot;n&quot;&gt;Device&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mDevice&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; 
@@ -520,8 +516,6 @@ The following steps outline how I integrated Dear Imgui into The Nile Engine. If
 &lt;span class=&quot;k&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;check_vk_result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;VkResult&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;simple_ui.cpp:&lt;/p&gt;
-
 &lt;p&gt;In the SimpleUI class implementation we are setting up a Dear Imgui context when the class constructor is called. We are also making sure to cleanup the context and descriptor pool in the destructor.&lt;/p&gt;
 
 &lt;div class=&quot;language-cpp highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&quot;simple_ui.hpp&quot;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
@@ -639,9 +633,9 @@ The following steps outline how I integrated Dear Imgui into The Nile Engine. If
         &lt;span class=&quot;n&quot;&gt;ImGui&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;End&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
     &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;//Render ImGui and record ImGui primitives into the Vulkan command buffer. The method also updates the clear values in the renderer with the values obtained from ImGui.&lt;/span&gt;
-&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SimpleUI&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;renderUI&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;VkCommandBuffer&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;commandBuffer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Renderer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;renderer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Render ImGui and record ImGui primitives into the Vulkan command buffer. The method also updates the clear values in the renderer with the values obtained from ImGui.&lt;/p&gt;
+&lt;div class=&quot;language-cpp highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SimpleUI&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;renderUI&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;VkCommandBuffer&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;commandBuffer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Renderer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;renderer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;ImGui&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Render&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;ImDrawData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;draw_data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ImGui&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GetDrawData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;bool&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;is_minimized&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;draw_data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DisplaySize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.0&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;draw_data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DisplaySize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.0&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
@@ -656,13 +650,14 @@ The following steps outline how I integrated Dear Imgui into The Nile Engine. If
     &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;We can now initialize a new SimpleUI object from anywhere in our app and start the UI inside the game loop before calling the render method; Make sure you are passing in a valid commandBuffer to the SimpleUI class.&lt;/p&gt;
-&lt;div class=&quot;language-cpp highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &lt;span class=&quot;n&quot;&gt;SimpleUI&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;simpleUI&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;p&gt;Initialize a new SimpleUI object from anywhere in our app and start the UI inside the game loop before calling the render method; Make sure you are passing in a valid commandBuffer to the SimpleUI class.&lt;/p&gt;
+&lt;div class=&quot;language-cpp highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;SimpleUI&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;simpleUI&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;device&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;window&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getGLFWwindow&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;renderer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getSwapChainRenderPass&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;renderer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getImageCount&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+
 &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;window&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shouldClose&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;glfwPollEvents&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
 

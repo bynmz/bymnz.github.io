@@ -893,8 +893,6 @@ The following steps outline how I integrated Dear Imgui into The Nile Engine. If
 
 <p>First, I copied the Dear imgui library into the <code class="language-plaintext highlighter-rouge">external/imgui</code> directory and added it’s path to cmake.</p>
 
-<p>CMakeLists.txt:</p>
-
 <div class="language-cmake highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">include_directories</span><span class="p">(</span>external<span class="p">)</span>
 
 <span class="c1"># If IMGUI_PATH not specified in .env.cmake, try fetching from git repo</span>
@@ -909,13 +907,11 @@ The following steps outline how I integrated Dear Imgui into The Nile Engine. If
 </code></pre></div></div>
 <p>Next, I created a new directory <code class="language-plaintext highlighter-rouge">framework/ui</code> for my SimpleUI class header and implementation files.</p>
 
-<p>simple_ui.hpp:</p>
-
-<p>This is a standard C++ header file where I initialize the member variables, constructor, destructor (for clean programming :)), and a few private/ public methods that we can call in our app.</p>
+<p>Create a standard C++ header file <code class="language-plaintext highlighter-rouge">simpleUI.hpp</code> and initialize the member variables, constructor, destructor (for clean programming :)), and a few private/ public methods that we can call in our app.</p>
 
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">SimpleUI</span>
 <span class="p">{</span>
-<span class="nl">private:</span>
+<span class="nl">private:</span><span class="n">sim</span>
 <span class="kt">void</span> <span class="n">loadFonts</span><span class="p">();</span>
 
 <span class="n">Device</span><span class="o">&amp;</span> <span class="n">mDevice</span><span class="p">;</span> 
@@ -958,8 +954,6 @@ The following steps outline how I integrated Dear Imgui into The Nile Engine. If
 <span class="k">static</span> <span class="kt">void</span> <span class="n">check_vk_result</span><span class="p">(</span><span class="n">VkResult</span> <span class="n">err</span><span class="p">);</span>
 <span class="p">};</span>
 </code></pre></div></div>
-<p>simple_ui.cpp:</p>
-
 <p>In the SimpleUI class implementation we are setting up a Dear Imgui context when the class constructor is called. We are also making sure to cleanup the context and descriptor pool in the destructor.</p>
 
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">"simple_ui.hpp"</span><span class="cp">
@@ -1077,9 +1071,9 @@ The following steps outline how I integrated Dear Imgui into The Nile Engine. If
         <span class="n">ImGui</span><span class="o">::</span><span class="n">End</span><span class="p">();</span>
     <span class="p">}</span>
 <span class="p">}</span>
-
-<span class="c1">//Render ImGui and record ImGui primitives into the Vulkan command buffer. The method also updates the clear values in the renderer with the values obtained from ImGui.</span>
-<span class="kt">void</span> <span class="n">SimpleUI</span><span class="o">::</span><span class="n">renderUI</span><span class="p">(</span><span class="n">VkCommandBuffer</span> <span class="n">commandBuffer</span><span class="p">,</span> <span class="n">Renderer</span><span class="o">&amp;</span> <span class="n">renderer</span><span class="p">)</span> <span class="p">{</span>
+</code></pre></div></div>
+<p>Render ImGui and record ImGui primitives into the Vulkan command buffer. The method also updates the clear values in the renderer with the values obtained from ImGui.</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">SimpleUI</span><span class="o">::</span><span class="n">renderUI</span><span class="p">(</span><span class="n">VkCommandBuffer</span> <span class="n">commandBuffer</span><span class="p">,</span> <span class="n">Renderer</span><span class="o">&amp;</span> <span class="n">renderer</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">ImGui</span><span class="o">::</span><span class="n">Render</span><span class="p">();</span>
     <span class="n">ImDrawData</span><span class="o">*</span> <span class="n">draw_data</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetDrawData</span><span class="p">();</span>
     <span class="k">const</span> <span class="kt">bool</span> <span class="n">is_minimized</span> <span class="o">=</span> <span class="p">(</span><span class="n">draw_data</span><span class="o">-&gt;</span><span class="n">DisplaySize</span><span class="p">.</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="n">f</span> <span class="o">||</span> <span class="n">draw_data</span><span class="o">-&gt;</span><span class="n">DisplaySize</span><span class="p">.</span><span class="n">y</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">);</span>
@@ -1094,13 +1088,14 @@ The following steps outline how I integrated Dear Imgui into The Nile Engine. If
     <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div></div>
-<p>We can now initialize a new SimpleUI object from anywhere in our app and start the UI inside the game loop before calling the render method; Make sure you are passing in a valid commandBuffer to the SimpleUI class.</p>
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="n">SimpleUI</span> <span class="n">simpleUI</span><span class="p">{</span>
+<p>Initialize a new SimpleUI object from anywhere in our app and start the UI inside the game loop before calling the render method; Make sure you are passing in a valid commandBuffer to the SimpleUI class.</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">SimpleUI</span> <span class="n">simpleUI</span><span class="p">{</span>
     <span class="n">device</span><span class="p">,</span>
     <span class="n">window</span><span class="p">.</span><span class="n">getGLFWwindow</span><span class="p">(),</span>
     <span class="n">renderer</span><span class="p">.</span><span class="n">getSwapChainRenderPass</span><span class="p">(),</span>
     <span class="n">renderer</span><span class="p">.</span><span class="n">getImageCount</span><span class="p">()</span>
-  <span class="p">};</span>
+<span class="p">};</span>
+
 <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">window</span><span class="p">.</span><span class="n">shouldClose</span><span class="p">())</span> <span class="p">{</span>
     <span class="n">glfwPollEvents</span><span class="p">();</span>
 
