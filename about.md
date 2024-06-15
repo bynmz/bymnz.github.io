@@ -34,4 +34,4 @@ EV fleet management mobile application. GIS, real time asset tracking and chargi
 
 ## Contacts
 
-youngmwanzia@gmail.com
+bynmwz@gmail.com
