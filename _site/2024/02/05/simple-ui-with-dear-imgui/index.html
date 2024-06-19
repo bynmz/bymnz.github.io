@@ -923,7 +923,7 @@ The following steps outline how I integrated Dear Imgui into The Nile Engine. If
 
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">SimpleUI</span>
 <span class="p">{</span>
-<span class="nl">private:</span><span class="n">sim</span>
+<span class="nl">private:</span>
 <span class="kt">void</span> <span class="n">loadFonts</span><span class="p">();</span>
 
 <span class="n">Device</span><span class="o">&amp;</span> <span class="n">mDevice</span><span class="p">;</span> 
@@ -1047,9 +1047,9 @@ The following steps outline how I integrated Dear Imgui into The Nile Engine. If
         <span class="k">if</span> <span class="p">(</span><span class="n">err</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
             <span class="n">abort</span><span class="p">();</span>
     <span class="p">}</span>
-
-<span class="c1">// Initializes ImGui for a new frame.</span>
-<span class="kt">void</span> <span class="n">SimpleUI</span><span class="o">::</span><span class="n">startUI</span><span class="p">()</span> <span class="p">{</span>
+</code></pre></div></div>
+<p>The <code class="language-plaintext highlighter-rouge">startUI</code> method initializes ImGui for a new frame.</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">SimpleUI</span><span class="o">::</span><span class="n">startUI</span><span class="p">()</span> <span class="p">{</span>
     <span class="n">ImGui_ImplVulkan_NewFrame</span><span class="p">();</span>
     <span class="n">ImGui_ImplGlfw_NewFrame</span><span class="p">();</span>
     <span class="n">ImGui</span><span class="o">::</span><span class="n">NewFrame</span><span class="p">();</span>
@@ -1133,8 +1133,6 @@ The following steps outline how I integrated Dear Imgui into The Nile Engine. If
 <p><img src="/images/nile_ui_in_action.png" alt="" /></p>
 
 <p>The SimpleUI class encapsulates the setup, management, and rendering of ImGui components seamlessly into the application. With ImGui, you can easily create interactive user interfaces for tweaking parameters, visualizing data, and enhancing the debugging process.</p>
-
-<p>Feel free to extend the functionality of the SimpleUI class to include additional ImGui features and cater to the specific needs of your application. Experiment with different ImGui widgets, layouts, and styles to create a user-friendly environment that enhances the overall usability of your graphics application.</p>
 
 <table>
 <tr>
