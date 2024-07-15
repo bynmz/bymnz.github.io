@@ -3,7 +3,7 @@ layout: default
 title: About
 ---
 ## About
-Hi there! My name is Young. I'm a Senior Software Engineer, currently working on building a game engine from scratch at Nilotic Studios!
+Hi there! My name is Young. I'm a Senior Software Engineer, currently working on 2D/3D graphics technology at Nile Origin Studios!
 I use C++, Rust, Python and JavaScript (just to name a few) for mobile, web and embedded software projects. I'm open to working on your next project, find my contact information below!
 
 ## Projects
