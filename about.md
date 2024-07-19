@@ -19,7 +19,7 @@ Personal 2D/3D graphics engine project in C++(17) using the Vulkan API, availabl
 </video>
 
 #### Roam mobile app
-EV fleet management mobile application. GIS, real time asset tracking and charging seesion management. Developed with React Native, available on IOS and Android
+EV fleet management mobile application. GIS, real time asset tracking, device locking and charging session management. Developed with React Native, available on IOS and Android
 <video controls width="620" poster="/images/roam_app.jpg">
   <source src="/images/roam_app.webm" type="video/webm" />
   <p>
