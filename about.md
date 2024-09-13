@@ -10,13 +10,9 @@ I use C++, Rust, Python and JavaScript (just to name a few) for mobile, web and 
 
 #### Nile Engine
 Personal 2D/3D graphics engine project in C++(17) using the Vulkan API, available on Windows, Linux and macOS.
-<video controls width="620" poster="/images/nile_thumb.png">
-  <source src="/images/nile_show_off.webm" type="video/webm" />
-  <p>
-    Your browser doesn't support HTML video. Here is a
-    <a href="/images/nile_show_off.webm" download="nile_show_off.webm">link to the video</a> instead.
-  </p>
-</video>
+
+<img src="/images/nile_thumb.png" alt="Nile Show Off" width="620">
+
 
 #### Roam mobile app
 EV fleet management mobile application. GIS, real time asset tracking, device locking and charging session management. Developed with React Native, available on IOS and Android
