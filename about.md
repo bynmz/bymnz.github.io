@@ -4,7 +4,7 @@ title: About
 ---
 ## About
 Hi there! My name is Young. I'm a Senior Software Engineer, currently working on 2D/3D graphics technology at Nile Origin Studios!
-I use C++, Rust, Python and JavaScript (just to name a few) for mobile, web and embedded software projects. I'm open to working on your next project, find my contact information below!
+I use C++, Rust, Python and JavaScript (just to name a few) for mobile, web and embedded software projects. If you're looking for a skilled engineer to bring your next project to life, feel free to reach out—my contact information is below!
 
 ## Projects
 
@@ -24,9 +24,9 @@ EV fleet management mobile application. GIS, real time asset tracking, device lo
   </p>
 </video>
 
-## Resume
+<!-- ## Resume
 
-- <a href="https://bynmz.github.io/images/Ben_Young_Mwanzia_Resume.pdf" target="_blank">Link</a>
+- <a href="https://bynmz.github.io/images/Ben_Young_Mwanzia_Resume.pdf" target="_blank">Link</a> -->
 
 ## Contacts
 
