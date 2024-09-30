@@ -24,6 +24,11 @@ EV fleet management mobile application. GIS, real time asset tracking, device lo
   </p>
 </video>
 
+<br/>
+
+
+See more projects in my <a href="https://bynmz.github.io/images/Ben_Young_Mwanzia_portfolio.pdf"> portfolio </a>!
+
 <!-- ## Resume
 
 - <a href="https://bynmz.github.io/images/Ben_Young_Mwanzia_Resume.pdf" target="_blank">Link</a> -->
